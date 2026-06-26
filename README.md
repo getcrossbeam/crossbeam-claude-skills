@@ -5,8 +5,6 @@ go-to-market teams. Each skill brings partner overlap, co-sell context, and
 ecosystem signals from [Crossbeam](https://www.crossbeam.com/) into your
 revenue team's AI workflows.
 
-Browse the catalog at [crossbeam.com/claude-skills](https://crossbeam-v2.webflow.io/claudeskills).
-
 ## Skills
 
 ### Partnerships
