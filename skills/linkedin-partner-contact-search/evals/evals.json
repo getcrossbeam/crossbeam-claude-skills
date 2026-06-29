@@ -1,0 +1,29 @@
+{
+  "skill_name": "linkedin-search",
+  "evals": [
+    {
+      "id": 0,
+      "name": "partner-contact-named-company",
+      "prompt": "Who runs partnerships at Gong? Find me the right person to reach out to about co-selling.",
+      "expected_output": "One or a few real individuals at Gong in a partnerships/alliances role, each with a LinkedIn /in/ profile URL, title, and a short rationale. Should not fabricate names or include job postings.",
+      "files": [],
+      "assertions": []
+    },
+    {
+      "id": 1,
+      "name": "prospect-icp-list",
+      "prompt": "Build me a ranked list of about 10 VPs or Heads of Partnerships at mid-market SaaS companies in the US that I could prospect.",
+      "expected_output": "A ranked table of ~10 real people with name, title, company, location, LinkedIn URL, and fit tier. Deduplicated, no job postings, honest about confidence.",
+      "files": [],
+      "assertions": []
+    },
+    {
+      "id": 2,
+      "name": "revops-fintech-prospects",
+      "prompt": "Find me a few RevOps leaders at fintech companies I could reach out to.",
+      "expected_output": "A short ranked list of real RevOps/Revenue Operations leaders at fintech companies with LinkedIn URLs and titles. Should ask a clarifying question only if truly needed, otherwise return candidates.",
+      "files": [],
+      "assertions": []
+    }
+  ]
+}
