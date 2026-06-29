@@ -1,5 +1,5 @@
 ---
-name: Ecosystem-Informed Account Brief
+name: ecosystem-informed-account-brief
 description: Produce a structured account brief enriched with Crossbeam's ecosystem intelligence and signals — partner overlap, ecosystem relationships, and recent partner activity signals. Uses the sources the user has configured plus Crossbeam MCP and recent news. Use whenever someone asks to be "briefed on" an account, wants an "overview" or "context" on an account, or asks "what do we know about X". For one-off lookups or qualitative questions across communications, use a direct query to the relevant source instead.
 ---
 

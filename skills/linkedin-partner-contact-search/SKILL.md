@@ -1,5 +1,5 @@
 ---
-name: linkedin-search
+name: linkedin-partner-contact-search
 description: >-
   Find the right people on LinkedIn through an ecosystem-led-growth (ELG) lens —
   net-new prospects matching an ICP, or partner-side contacts (Partnerships,

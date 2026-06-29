@@ -1,5 +1,5 @@
 ---
-name: Ecosystem-Powered Pipeline Prioritization
+name: ecosystem-powered-pipeline-prioritization
 description: Scans a configured list of accounts for Crossbeam ecosystem intelligence and signals — partner deal activity, overlap populations, and recent partner movements — then ranks accounts by signal strength and surfaces the ones worth acting on. Optionally generates an outreach angle per account based on the ecosystem context. Use whenever someone wants to scan accounts for partner signals, prioritize their pipeline using ecosystem data, run a daily or weekly signal scan, or identify which accounts have buying motion their team can't see. Not for one-off account lookups — use the Ecosystem-Informed Account Brief for that.
 ---
 

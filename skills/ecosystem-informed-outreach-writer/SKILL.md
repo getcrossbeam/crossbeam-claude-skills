@@ -1,5 +1,5 @@
 ---
-name: outbound-email-writer
+name: ecosystem-informed-outreach-writer
 description: >
   Drafts rep-quality outbound emails and 1, 3, or 7-email sequences for any sales,
   partnerships, or GTM motion (cold, warm/intent, re-engagement, expansion, event
