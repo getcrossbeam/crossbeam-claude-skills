@@ -10,7 +10,21 @@ GitHub** before you ever load it into Claude. Each skill lives in its own folder
 under [`skills/`](skills/) with a `SKILL.md` (the skill itself) plus any
 supporting `references/` and `README.md` files.
 
+**The MCP gives the data; the skill gives the judgment and the ELG method.**
+The [Crossbeam](https://www.crossbeam.com/) MCP returns partner overlaps,
+co-sell context, and ecosystem signals — but the raw data still leaves the hard
+calls to you. These skills encode the expert workflow on top of it: which
+partner to work and why, the right play, the safe next step. The same expert
+workflow for every rep, every run.
+
 ## Skills
+
+### Co-sell & prospecting
+
+| Skill | What it does |
+|---|---|
+| [Co-Sell Copilot](skills/crossbeam-co-sell-copilot/SKILL.md) | Name an account or a stuck deal; it finds the best-positioned partner, picks the play (intro / intel / reference / voucher / co-sell), and drafts the rep-to-rep ask — with something to give back. |
+| [Ecosystem Prospecting (EQL Finder)](skills/crossbeam-ecosystem-prospecting/SKILL.md) | Turns the ecosystem into a ranked prospect list: who to work, why (which partner, customer vs deal), the angle, and the warm path in. |
 
 ### Account intelligence & prioritization
 
