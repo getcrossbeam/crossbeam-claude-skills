@@ -63,7 +63,7 @@ The MCP server exposes these tools; their power comes from **combining** them
 | `get_partner_populations` | Partner Populations visible to you |
 | `get_account_overlap_info` | Partner overlaps for a specific account by ID |
 | `get_own_account_info` | Search your accounts by domain, CRM record ID, or name (fuzzy) |
-| `get_record_signals` | Signal events for accounts/leads (e.g. partner deal opened / closed won), newest first |
+| `get_ecosystem_activity` | Signal events for accounts/leads (e.g. partner deal opened / closed won), newest first |
 | `search_help_center` | Product info from the Crossbeam Help Center |
 | `search_blog_site` | Context/tactics/stories from Crossbeam Insider |
 | `search_elg_book` | Use cases from the Ecosystem-Led Growth book |

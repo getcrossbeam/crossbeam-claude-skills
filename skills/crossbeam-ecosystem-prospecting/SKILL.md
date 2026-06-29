@@ -165,11 +165,11 @@ find_overlaps(
 ```
 Excluding `customers` from `our_segments` drops accounts you already sell to (lower value, per design). Paginate to the full qualified pool — more good leads is the goal; the cap is ICP fit, not an arbitrary number.
 
-## Step 3 — Label the our-side segment (two passes)
+## Step 3 — Label the our-side segment (add the open-opp pass)
 
-`find_overlaps` returns the partner's segment, not yours, so a single call can't tell a prospect from an open opp on your side. To separate them:
-- **Pass A** `our_segments: ["prospects"]` → the prime lead list.
-- **Pass B** `our_segments: ["open_opportunities"]` → accounts already in your pipeline.
+`find_overlaps` returns the partner's segment, not yours, so a single call can't tell a prospect from an open opp on your side. Step 2 already pulled the `our_segments: ["prospects"]` pass — **that result is your prime lead list; do not re-query it here.** Make one additional call to separate the in-motion accounts:
+- **Pass A (prospects)** — reuse the Step 2 result as-is → the prime lead list.
+- **Pass B (open opps)** — repeat the Step 2 call with `our_segments: ["open_opportunities"]` (same `partners` anchor set) → accounts already in your pipeline.
 Label Pass A as prime; flag anything in Pass B as **already-in-motion** (lower priority, or hand to crossbeam-co-sell-copilot). Default the lead list to prospects only.
 
 **Out of scope, state it honestly:** `find_overlaps` is an *intersection* — it only returns accounts already in your CRM/populations. Accounts a partner has that you have never entered (true net-new-to-CRM whitespace) cannot be reached through this tool. Don't imply the list contains them.

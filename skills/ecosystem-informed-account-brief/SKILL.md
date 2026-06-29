@@ -29,7 +29,7 @@ Decide which sources you want included in every brief and fill them into the Con
 
 > **Fill in before sharing:** `Configured sources: [list your sources here]`
 
-You can still override on a per-run basis ("brief me on Acme, skip [source] this time") but the configured list is the default. If nothing is configured, Claude will stop and ask before pulling anything.
+You can still override on a per-run basis ("brief me on Acme, skip [source] this time") but the configured list is the default. If nothing is configured here, the brief still runs on Crossbeam alone and reflects ecosystem intelligence only — it won't pull from any source that isn't listed.
 
 **Step 3 — Set your Crossbeam partner tags (optional)**
 If you want the brief to focus on specific partners — Tier 1s, active co-sell partners, strategic ISVs — fill in which Crossbeam tags identify them in the Configuration section.
@@ -88,7 +88,7 @@ Produces a structured account brief by combining configured data sources with Cr
 
 Crossbeam MCP is required. The brief works with Crossbeam alone — but ecosystem signals become significantly more actionable when layered with your account intelligence and sales intelligence tools. The more context you configure, the more complete the picture.
 
-Configured sources are the default for every run. Individual runs can override ("skip [source] this time", "include [source] for this one"). If configured sources are blank, stop and tell the user they need to be defined in the Configuration section before the skill can run — do not pull from any source that is not explicitly listed there.
+The Configured sources field governs only the optional account and sales intelligence sources — Crossbeam MCP is always available and is pulled in Step 3 regardless. Configured sources are the default for every run, and individual runs can override ("skip [source] this time", "include [source] for this one"). If configured sources are blank, do not stop: run a Crossbeam-only brief that reflects ecosystem intelligence only, and note that account and sales intelligence sources weren't configured. Never pull from a source that is not explicitly listed in Configuration.
 
 ---
 
@@ -100,7 +100,7 @@ Infer the domain from the account name if not provided. If ambiguous, ask once.
 
 ## Step 2 — Gather account data
 
-Use only the sources explicitly listed in the Configuration section above. Do not pull from any source not listed there, even if it is connected. If only Crossbeam is configured, the brief will reflect ecosystem intelligence only — account and sales intelligence sources are optional but make the ecosystem signals more actionable when included.
+Use only the sources explicitly listed in the Configuration section above. Do not pull from any source not listed there, even if it is connected. If the Configured sources field is blank — or lists only Crossbeam — skip straight to Step 3: the brief will reflect ecosystem intelligence only. Account and sales intelligence sources are optional but make the ecosystem signals more actionable when included. A blank field is never a reason to halt.
 
 If the user overrides for this run ("skip [source] this time", "include [source]"), apply that override for this run only.
 
