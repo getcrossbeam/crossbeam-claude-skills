@@ -56,11 +56,14 @@ workflow for every rep, every run.
 
 ## Using a skill
 
-Each skill lives in its own folder under [`skills/`](skills/) as Markdown, so
-you can open and read any `SKILL.md` directly on GitHub. To use one in Claude
-(Claude Desktop, Claude Code, or the Claude API), add the skill's folder so its
-`SKILL.md` and any `references/` files are available together in your
-conversations.
+Each skill lives in its own folder under [`skills/`](skills/) as Markdown, so you can open and read any `SKILL.md` directly on GitHub. To use one in Claude (Claude Desktop, Claude Code, or the Claude API):
+
+1. Download the full skill folder — not just the `SKILL.md` file. Some skills depend on files in the `references/` subfolder to work correctly. You can download a ready-to-use `.zip` for each skill from [crossbeam.com/claudeskills](https://www.crossbeam.com/claudeskills), or download the full folder from GitHub.
+2. Review and configure the skill to your needs. (Tip: Ask Claude for help with configuration.)
+3. Upload it to Claude following the instructions in [Claude's support docs](https://support.claude.ai/en/articles/10065836-using-skills-in-claude).
+4. The skill will be available in any new conversation.
+
+For details on connecting Crossbeam to Claude, review our [help documentation here](https://help.crossbeam.com).
 
 ## Feedback
 
