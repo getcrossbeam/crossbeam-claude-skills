@@ -1,23 +1,18 @@
-# Crossbeam Claude Skills
+# Crossbeam Skills for Claude, ChatGPT, and AI Agents
 
-Ready-made [Claude](https://www.claude.com/) Skills for partnership and
-go-to-market teams. Each skill brings partner overlap, co-sell context, and
-ecosystem signals from [Crossbeam](https://www.crossbeam.com/) into your
-revenue team's AI workflows.
+The Crossbeam team has created ready-made Skills for partnership and go-to-market teams. Each skill brings partner overlap, co-sell context, and ecosystem signals from [Crossbeam](https://www.crossbeam.com/) into your revenue team's AI workflows.
 
-Every skill is plain Markdown (`.md`) so you can **read it directly here on
-GitHub** before you ever load it into Claude. Each skill lives in its own folder
+Every skill is a set of agent instructions and resources packaged in a plain Markdown file (`.md`) so you can **read it directly here on
+GitHub** before you ever load it into Claude, ChatGPT, or your AI tool of choice. Each skill lives in its own folder
 under [`skills/`](skills/) with a `SKILL.md` (the skill itself) plus any
 supporting `references/` and `README.md` files.
 
-**The MCP gives the data; the skill gives the judgment and the ELG method.**
-The [Crossbeam](https://www.crossbeam.com/) MCP returns partner overlaps,
-co-sell context, and ecosystem signals — but the raw data still leaves the hard
-calls to you. These skills encode the expert workflow on top of it: which
-partner to work and why, the right play, the safe next step. The same expert
-workflow for every rep, every run.
+**MCP connections provide data to your agents; Skills provide the judgment and the Ecosystem-Led Growth best practices.**
+The [Crossbeam](https://www.crossbeam.com/) MCP returns partner overlaps, co-sell context, and ecosystem signals. These skills encode an expert workflow on top of it: which partner to work and why, the right play, the next best action to take. 
 
-## Skills
+**Note: Skills can be used across different AI tools, not just Claude or ChatGPT. The format is an open standard, so the skills you see here can also work with other AI platforms that support skills or building agents using natural language. If you’re using a different AI tool, check their docs for instructions on how to set up and use skills there.**
+
+## Available Skills
 
 ### Co-sell & prospecting
 
@@ -56,15 +51,19 @@ workflow for every rep, every run.
 
 ## Using a skill
 
-Each skill lives in its own folder under [`skills/`](skills/) as Markdown, so you can open and read any `SKILL.md` directly on GitHub. To use one in Claude (Claude Desktop, Claude Code, or the Claude API):
+Each skill lives in its own folder under [`skills/`](skills/) as Markdown, so you can open and read any `SKILL.md` directly on GitHub. To use one in Claude (Claude Desktop, Claude Code, or the Claude API), ChatGPT, or other AI agents:
 
 1. Download the full skill folder — not just the `SKILL.md` file. Some skills depend on files in the `references/` subfolder to work correctly. You can download a ready-to-use `.zip` for each skill from [crossbeam.com/claudeskills](https://www.crossbeam.com/claudeskills), or download the full folder from GitHub.
-2. Review and configure the skill to your needs. (Tip: Ask Claude for help with configuration.)
-3. Upload it to Claude following the instructions in [Claude's support docs](https://support.claude.ai/en/articles/10065836-using-skills-in-claude).
+2. Review and configure the skill to your needs. (Tip: Ask your AI tool for help with configuration.)
+3. Upload the skill following the instructions in your tools support docs
+   -  [Claude's support docs](https://support.claude.ai/en/articles/10065836-using-skills-in-claude).
+   -  [ChatGPT's support docs](https://help.openai.com/en/articles/20001066-skills-in-chatgpt).
 4. The skill will be available in any new conversation.
+
+https://github.com/user-attachments/assets/2837be4f-d9b8-4bec-b682-f40a2464ad48
 
 For details on connecting Crossbeam to Claude, review our [help documentation here](https://help.crossbeam.com).
 
 ## Feedback
 
-Have a use case we haven't built yet? Reach out to the Crossbeam team.
+Have feedback or a use case we haven't built yet? Share it with our team [here](https://docs.google.com/forms/d/e/1FAIpQLScPr15cLPv3HZniTbid7QBXraCLPBAP8rJGB-fxDEzMWw_Wjg/formResponse)
