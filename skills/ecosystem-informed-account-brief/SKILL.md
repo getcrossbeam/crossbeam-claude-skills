@@ -64,7 +64,7 @@ Just ask Claude — it can walk you through connecting tools, finding your Cross
 
 ## Related
 
-- **Meeting prep** — if you have a specific upcoming meeting with known attendees, use the meeting-prep skill instead.
+- **Meeting prep** — if you have a specific upcoming meeting with known attendees, and you have a meeting-prep skill installed, use that instead.
 - **One-off lookups** — ask Claude to query your source directly for time-windowed or count-bounded requests.
 
 ---
@@ -112,29 +112,31 @@ If a configured source isn't connected, tell the user and ask if they'd like to 
 
 Run all three calls. If the account isn't found in Crossbeam, note it and skip to Step 4.
 
+> **Tool names:** the Crossbeam MCP tool-name prefix varies per installation (e.g. `Crossbeam:`, `mcp__Crossbeam__`). Match on the suffixes below rather than the full name, and confirm the actual tool surface on the first call — tool sets differ between installs.
+
 **3a — Resolve the account**
 ```
-Crossbeam:get_own_account_info(account_domain: "example.com")
+get_account_context(account_domain: "example.com")
 ```
-Extract the `record_id`.
+Accepts `account_domain`, `account_name` (fuzzy), or `account_id`. Domain is the most reliable. Extract the account's CRM `record_id` / `account_id` from the match — Step 3c needs it. If several accounts come back, pick by the user's intent and confirm if unclear.
 
 **3b — Get partner overlap**
 ```
-Crossbeam:get_account_overlap_info(account_id: "<record_id>")
+find_overlap_partners(account_id: "<record_id>")
 ```
-If strategic partner tags are configured, also call:
+If strategic partner tags are configured, filter in the same call — this tool takes the tag directly, so no second call and no manual intersect is needed:
 ```
-Crossbeam:find_partners(partner_tag_id: "<tag_id>")
+find_overlap_partners(account_id: "<record_id>", partner_tag_name: "<tag>")
 ```
-Then intersect — keep only overlaps where the partner matches a tagged partner. If no tags configured, use all overlapping partners.
+An ambiguous tag returns `ClarificationRequired` with candidates; present them and retry with `partner_tag_id`. If no tags are configured, omit the tag argument to get every partner that shares the account.
 
 For each match capture: partner name, population name, and partner owner name if available. Do not surface partner owner contact details (email, phone) in the brief. If a signal suggests a partner motion, note in NEXT STEPS that partner owner contact details are available but recommend coordinating with their partnerships lead before reaching out — they may already have an active relationship or motion with this partner.
 
 **3c — Get ecosystem activity signals**
 ```
-Crossbeam:get_ecosystem_activity(account_domain: "example.com")
+get_ecosystem_activity(record_ids: ["<record_id>"], resource_type: "accounts")
 ```
-If strategic partner tags are configured, filter to those partners by name. If any partner name is ambiguous, resolve the ClarificationRequired before proceeding.
+This tool filters by CRM **record ID**, not by domain — use the `record_id` from Step 3a. Optionally narrow with `partner_names` (fuzzy; ambiguous names return `ClarificationRequired` — resolve before proceeding) or `event_types`, whose valid values are `partner_deal_opened`, `partner_deal_closed_won`, and `partner_greenfield_deal_closed_won`. If strategic partner tags are configured, pass the tagged partner names from Step 3b.
 
 Capture: event type (deal opened / deal closed won / greenfield), partner name, date, contact context if available.
 
@@ -273,4 +275,4 @@ If none detected: "No negative sentiment or churn signals detected."
 - Strategic partner tag IDs are set by the user in Configuration — do not hardcode them.
 - Risks & Concerns must be affirmatively justified, never empty.
 - The brief is for internal use only.
-- If the user mentions a specific upcoming meeting with known attendees, suggest the meeting-prep skill instead.
+- If the user mentions a specific upcoming meeting with known attendees, suggest a meeting-prep skill instead, if one is installed.

@@ -55,18 +55,33 @@ The MCP server exposes these tools; their power comes from **combining** them
 
 | Tool | Returns |
 | --- | --- |
-| `find_partners` | All your Crossbeam partners — assess coverage and impact |
-| `get_partner_tags` | Partner tags your org created, for filtering/segmentation |
-| `get_partner_suggestions` | Suggested / potential new partners |
-| `get_partner_leaderboard` | Historical partner performance across recently closed deals |
-| `get_own_populations` | Your org's defined Populations |
-| `get_partner_populations` | Partner Populations visible to you |
-| `get_account_overlap_info` | Partner overlaps for a specific account by ID |
-| `get_own_account_info` | Search your accounts by domain, CRM record ID, or name (fuzzy) |
-| `get_ecosystem_activity` | Signal events for accounts/leads (e.g. partner deal opened / closed won), newest first |
-| `search_help_center` | Product info from the Crossbeam Help Center |
-| `search_blog_site` | Context/tactics/stories from Crossbeam Insider |
-| `search_elg_book` | Use cases from the Ecosystem-Led Growth book |
+| `get_account_context` | Your CRM account records as mirrored in Crossbeam — look up by domain, CRM record ID, or name (fuzzy) |
+| `get_partner_context` | All your partners with metrics and tags — the canonical partner list; sortable by partner score, win rate, revenue, overlap count |
+| `get_partner_suggestions` | Suggested new partners (Partnerbase) you don't yet partner with, each with an invite link |
+| `get_partner_sharing_status` | What **you** share with a given partner about a given account, plus whether the partnership is active |
+| `find_overlaps` | **Accounts-out**: the shared accounts between you and a partner (or across the whole ecosystem), filtered by population/segment on either side |
+| `find_overlap_partners` | **Partners-out**: which partners share a given account, filterable by partner tag |
+| `find_partner_contacts` | Partner-shared contacts at an account, ranked by role signal (economic buyer, decision maker, …) with an `in_own_crm` flag |
+| `find_partner_recommendations` | Partners recommended for a specific deal/account, ranked by Ecosystem Intelligence signals (recent wins, missing contacts, long-term relationship) |
+| `find_new_accounts` | Pipeline-generation accounts — companies your partners sell to that you could go after, including net-new greenfield not in your CRM |
+| `get_ecosystem_activity` | Signal events for accounts/leads (partner deal opened / closed won / greenfield), newest first |
+| `search_crossbeam_knowledge` | Public Crossbeam content — Help Center docs, ELG Insider blog and case studies, and the Ecosystem-Led Growth book |
+| `get_deal_navigator_close_deals_link` | A filtered link into the Deal Navigator close-deals view |
+| `switch_crossbeam_organization` | Switch the active Crossbeam org, or refresh the session |
+
+Two things worth knowing before you write against these:
+
+- **`find_overlaps` vs `find_overlap_partners`** is the most common mix-up. The
+  deciding signal is the *shape of the answer* — a list of accounts vs a list of
+  partners — not which company the user named.
+- **Populations are filters, not their own tools.** Pass `our_populations` /
+  `our_segments` and per-partner `populations` / `segments` to `find_overlaps`
+  rather than looking for a standalone populations endpoint.
+
+> The MCP tool surface is evolving during Limited Availability, and tool sets can
+> differ between installations. Confirm the tools actually exposed on your
+> connection before hard-coding names, and treat the list above as current-as-of
+> writing rather than a stable contract.
 
 ### Example prompts
 

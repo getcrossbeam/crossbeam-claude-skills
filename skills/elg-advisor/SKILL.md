@@ -1,6 +1,20 @@
 ---
 name: elg-advisor
-description: Give actionable ecosystem-led growth (ELG) and partner strategy recommendations to anyone — built on ELG frameworks developed at Crossbeam, no account required. Use this skill whenever someone asks about partner strategy, co-selling, ecosystem-led growth, partner prioritization, partner-influenced pipeline, co-marketing, partner programs, or how to work with partners to close deals faster. Also trigger when someone describes a GTM problem that could be solved with partner data or ecosystem plays — even if they don't use the words "ELG" or "ecosystem." Trigger on phrases like: "how do I prioritize my partners", "how should I run a co-sell motion", "my reps aren't using partner data", "how do I prove partner ROI", "how do I get sales to care about partnerships", "partner-sourced pipeline", "warm intro from a partner", "how do I grow through partners", "ecosystem strategy", "partner playbook", "co-marketing with partners." Always use this skill for partner strategy questions — even casual ones.
+description: >-
+  Give actionable ecosystem-led growth (ELG) and partner strategy
+  recommendations to anyone — built on ELG frameworks developed at Crossbeam, no
+  account required. Use this skill whenever someone asks about partner strategy,
+  co-selling, ecosystem-led growth, partner prioritization, partner-influenced
+  pipeline, co-marketing, partner programs, or how to work with partners to
+  close deals faster. Also trigger when someone describes a GTM problem that
+  could be solved with partner data or ecosystem plays — even if they don't use
+  the words "ELG" or "ecosystem". Trigger on phrases like "how do I prioritize
+  my partners", "how should I run a co-sell motion", "my reps aren't using
+  partner data", "how do I prove partner ROI", "how do I get sales to care about
+  partnerships", "partner-sourced pipeline", "warm intro from a partner", "how
+  do I grow through partners", "ecosystem strategy", "partner playbook",
+  "co-marketing with partners". Always use this skill for partner strategy
+  questions — even casual ones.
 ---
 
 # ELG Advisor

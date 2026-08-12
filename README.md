@@ -67,3 +67,7 @@ For details on connecting Crossbeam to Claude, review our [help documentation he
 ## Feedback
 
 Have feedback or a use case we haven't built yet? Share it with our team [here](https://docs.google.com/forms/d/e/1FAIpQLScPr15cLPv3HZniTbid7QBXraCLPBAP8rJGB-fxDEzMWw_Wjg/formResponse)
+
+## License
+
+Released under the [MIT License](LICENSE).

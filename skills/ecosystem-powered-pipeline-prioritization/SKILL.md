@@ -148,29 +148,33 @@ For each account, collect at minimum: account name and domain. Domain makes Cros
 
 For each account on the list, run the following. If the account isn't found in Crossbeam, note it and move to the next — don't stop the scan.
 
+> **Tool names:** the Crossbeam MCP tool-name prefix varies per installation (e.g. `Crossbeam:`, `mcp__Crossbeam__`). Match on the suffixes below rather than the full name, and confirm the actual tool surface on the first call — tool sets differ between installs.
+
 **2a — Resolve the account in Crossbeam**
 ```
-Crossbeam:get_own_account_info(account_domain: "example.com")
+get_account_context(account_domain: "example.com")
 ```
-Extract the `record_id`.
+Accepts `account_domain`, `account_name` (fuzzy), or `account_id`. Domain is the most reliable. Extract the account's CRM `record_id` / `account_id` — Step 2c needs it.
 
 **2b — Get partner overlap**
 ```
-Crossbeam:get_account_overlap_info(account_id: "<record_id>")
+find_overlap_partners(account_id: "<record_id>")
 ```
-If strategic partner tags are configured, also call:
+If strategic partner tags are configured, filter in the same call — this tool takes the tag directly, so no second call and no manual intersect is needed:
 ```
-Crossbeam:find_partners(partner_tag_id: "<tag_id>")
+find_overlap_partners(account_id: "<record_id>", partner_tag_name: "<tag>")
 ```
-Then intersect — keep only overlaps where the partner matches a tagged partner. If no tags configured, use all overlapping partners.
+An ambiguous tag returns `ClarificationRequired` with candidates; resolve it once at the start of the scan and reuse the confirmed `partner_tag_id` for every remaining account rather than re-prompting per account. If no tags are configured, omit the tag argument to get every partner that shares the account.
 
 Capture: partner name, population name (interpret intent over exact string — "Pipeline", "Active Opportunities" = open opportunity; "Clients", "Active Customers" = customer).
 
 **2c — Get ecosystem activity signals**
 ```
-Crossbeam:get_ecosystem_activity(account_domain: "example.com")
+get_ecosystem_activity(record_ids: ["<record_id>"], resource_type: "accounts")
 ```
-Filter to the configured lookback window. If strategic partner tags are configured, filter to those partners by name. Resolve any ClarificationRequired before proceeding.
+This tool filters by CRM **record ID**, not by domain — use the `record_id` from Step 2a. Optionally narrow with `partner_names` / `partner_ids`, or with `event_types`, whose valid values are `partner_deal_opened`, `partner_deal_closed_won`, and `partner_greenfield_deal_closed_won`. If strategic partner tags are configured, pass the tagged partner names from Step 2b.
+
+**The tool has no date-range parameter** — it returns events newest first. Apply the configured lookback window yourself by discarding events older than it, and paginate (`page`, `limit`) only until events fall outside the window.
 
 Capture: event type (deal opened / deal closed won / greenfield), partner name, date, contact name and title if available.
 
@@ -230,7 +234,7 @@ For each account in the ranked output, generate a suggested outreach angle based
 - What the entry point is for this account given those signals (e.g. reach out now before the stack solidifies, reference the shared partner relationship as context)
 - What to avoid (e.g. don't mention specific partner deal details — you're not supposed to know the specifics, only that there's activity)
 
-Keep angles to 2–3 sentences. These are talking points, not drafted messages. If the user wants a drafted message, suggest the Beamie skill or equivalent.
+Keep angles to 2–3 sentences. These are talking points, not drafted messages. If the user wants a drafted message, route them to the Ecosystem-Informed Outreach Writer skill (or any outreach-drafting skill they have installed).
 
 Note on every outreach angle: confirm with your partnerships lead before engaging — they'll know if there's already a motion in place and can help frame the approach.
 
