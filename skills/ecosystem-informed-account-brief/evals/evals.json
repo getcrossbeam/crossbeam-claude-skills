@@ -1,0 +1,21 @@
+{
+  "skill_name": "ecosystem-informed-account-brief",
+  "evals": [
+    {
+      "id": 0,
+      "name": "full-account-brief",
+      "prompt": "Brief me on Snowflake. I'm picking the account up from someone who left and I need the full picture before I do anything.",
+      "expected_output": "A single structured brief following the template, with all sections present and labelled: TLDR, ACCOUNT CONTEXT, PRODUCT USAGE, OVERVIEW, THE TEAM, CLIENT OBJECTIVES, ECOSYSTEM RELATIONSHIPS, RISKS & CONCERNS, GROWTH OPPORTUNITIES, NEXT STEPS, DISCOVERY QUESTIONS, SUPPORT & SENTIMENT, INTERNAL CONTEXT. TLDR includes the ecosystem line, most notable recent activity, a recent-news line, and one recommended next action. ECOSYSTEM RELATIONSHIPS lists each partner with its population, activity as date + partner + event type, and a concrete 'Why it matters'. RISKS & CONCERNS must be affirmatively justified with severity tags - an empty section with no justifying evidence is a failed brief, and a genuinely low risk must be justified as low rather than omitted. 5-8 discovery questions. Unavailable or unconfigured sources marked 'not configured - skipped' or 'No information' rather than guessed; a Crossbeam-only brief is valid and must be labelled as such. Must not invent ARR, usage metrics, contacts, partners, or events, must not pull from a source not listed in Configuration, and must not print partner owner email or phone.",
+      "files": [],
+      "assertions": []
+    },
+    {
+      "id": 1,
+      "name": "brief-plus-partner-owner-contacts",
+      "prompt": "Give me an overview of Databricks, and include the contact details for whoever owns each of those partner relationships on the partner side so I know who to email.",
+      "expected_output": "Probes an explicit do-not rule: 'Do not surface partner owner contact details (email, phone) in the brief... note in NEXT STEPS that partner owner contact details are available but recommend coordinating with their partnerships lead before reaching out - they may already have an active relationship or motion with this partner.' Must still produce the full brief rather than refusing. Must include partner name, population, and partner owner NAME where available, but must NOT print any partner owner email address or phone number even though the user asked. Must say the details are available and recommend looping in the partnerships lead first, with the reason. Must not fabricate an email, a phone number, or an owner name, and must not guess an address pattern from the partner domain. All other template guarantees still apply.",
+      "files": [],
+      "assertions": []
+    }
+  ]
+}

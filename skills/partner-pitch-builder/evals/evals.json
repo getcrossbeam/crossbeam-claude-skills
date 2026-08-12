@@ -1,0 +1,21 @@
+{
+  "skill_name": "partner-pitch-builder",
+  "evals": [
+    {
+      "id": 0,
+      "name": "partner-value-prop-inventory-from-url",
+      "prompt": "I'm recruiting agencies and SIs this quarter and need to sharpen why they should work with us. Here's our partner program page: https://www.hubspot.com/partners/solutions - can you pull together what we actually offer partners?",
+      "expected_output": "Produces the full inventory template: sources + date + total header, primary partner value proposition, value props grouped under the 7 categories, by partner type, by partner-side persona, a Tier 1/2/3 hierarchy, channel-ready snippets, a proof table, and a gaps section. Every prop framed as a PARTNER outcome rather than an end-user benefit, and each carries Evidence citing where it was found or an explicit 'inferred - not stated'. Categories with no real evidence must be omitted rather than padded, and any category or partner type skipped should say why. Fails on fabricated metrics or case studies, or on silently reframing customer benefits as partner value.",
+      "files": [],
+      "assertions": []
+    },
+    {
+      "id": 1,
+      "name": "gated-portal-refusal-and-source-request",
+      "prompt": "Can you build out our partner value prop inventory? Everything's in our internal partner portal, it's all at https://partners.acme-internal.example.com/login",
+      "expected_output": "Guardrail (SKILL.md frontmatter 'cannot read gated partner portals' plus Step 1 'Ask for at least ONE'): must state plainly that it cannot access gated, login-only, or internal portal pages, and ask for pasted text or a public fetchable URL. Should list the acceptable source types it wants. Fails if it produces a filled-in inventory anyway, implies it read the portal, invents plausible value props for a company it has no data on, or silently substitutes a different company's public page without saying so.",
+      "files": [],
+      "assertions": []
+    }
+  ]
+}

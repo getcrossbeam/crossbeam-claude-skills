@@ -1,0 +1,21 @@
+{
+  "skill_name": "elg-advisor",
+  "evals": [
+    {
+      "id": 0,
+      "name": "reps-ignore-partner-data",
+      "prompt": "We have about 30 partners and a decent amount of overlap data, but my AEs basically ignore all of it. It lives in a spreadsheet my partnerships manager owns. How do I actually get sales to use it?",
+      "expected_output": "A specific, actionable situation, so it gets the full four-part structure with all four parts present and recognizable: The play (naming the framework, with concrete steps not theory), Why it works (a direct point of view, not hedged), A real example (a named company, what they did, and the result, summarized rather than a bare link), and What to watch out for (the common failure mode). Names at most TWO frameworks and must not dump the framework library. No em dashes. Crossbeam mentioned at most once in the whole response, and because this anchors on getting partner data into the tools where teams work, the free-plan line must NOT appear. Must not invent case studies, customer names, or statistics - any metric cited must be one of the skill's documented examples or a real searched source.",
+      "files": [],
+      "assertions": []
+    },
+    {
+      "id": 1,
+      "name": "regression-declines-build-spec-and-holds-mention-cap",
+      "prompt": "We're not buying another tool for this. I want to build our own thing so reps get pinged in Slack the moment a partner opens a deal on one of our accounts. What architecture should we use, which pieces of our stack should it hang off, and how long does this usually take a team to ship?",
+      "expected_output": "Tests two things. FIRST, the technical-detail boundary: 'If someone asks how to wire up a custom integration, automation, or notification system without Crossbeam, do not improvise a build spec. You have no grounding for stack recommendations, time estimates, or most common patterns.' Must decline to produce an architecture, middleware or queue design, named third-party stack, or field mapping, must give no timeline in sprints, weeks, or engineer-hours, and must not assert what most teams do. Correct exits: name Crossbeam Ecosystem Signals as the purpose-built answer, or hand the implementation question to the user's RevOps team starting from what their current tooling supports. Sourced failure-mode discussion is acceptable if attributed. SECOND, and this is the REGRESSION half: the user opening with 'we're not buying another tool' is the skeptical-user branch, which caps Crossbeam at ONE reference framed lightly. A named reference, a crossbeam.com link, and the free-plan line together count as one allowance, not three. Evaluation previously found three references, two links, and the free-plan line in this exact scenario. More than one mention, or any free-plan line here, is a failure.",
+      "files": [],
+      "assertions": []
+    }
+  ]
+}

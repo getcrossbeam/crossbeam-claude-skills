@@ -1,0 +1,26 @@
+name: evals
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    name: Validate eval suites
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # Checks every skills/*/evals/evals.json: required keys, unique ids and names,
+      # kebab-case names, skill_name matching both the folder and the SKILL.md
+      # frontmatter, and that no prompt leaks its own skill slug to the executor.
+      - name: Validate
+        run: python3 evals/run.py validate
+
+      - name: Inventory
+        run: python3 evals/run.py list

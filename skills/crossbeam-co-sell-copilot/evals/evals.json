@@ -1,0 +1,21 @@
+{
+  "skill_name": "crossbeam-co-sell-copilot",
+  "evals": [
+    {
+      "id": 0,
+      "name": "single-account-win-help",
+      "prompt": "We have an open enterprise deal at Verizon and I'm stuck with a single champion who keeps going quiet. Who can help me win it?",
+      "expected_output": "Names one recommended partner with a position strength (Strong or Medium) and the underlying signals cited. Names the specific coverage gap: which priority-role contacts the partner holds that are not already in our CRM. Classifies exactly one play from the fixed set (no-partner-attached, multi-thread, vouch, voucher, coordinate, marketplace). States a reciprocal give or explicitly says there is none. Includes the Step 8 confirmation summary ABOVE the draft. Draft is 90-140 words, addressed to the PARTNER REP, one easy yes/no CTA, no em dashes, no emojis, no banned jargon. Missing data must read 'not shared by the partner', never 'no overlap'. Fails on fabricated partner names, contacts, deal stages or metrics; on drafting where the partner is below the strength floor; or on claiming anything was sent. If Crossbeam MCP is not connected, stopping and saying so is the only acceptable response.",
+      "files": [],
+      "assertions": []
+    },
+    {
+      "id": 1,
+      "name": "urgency-draft-aimed-at-prospect",
+      "prompt": "I need to create urgency on the Globex renewal without giving a discount. Draft me the message for their VP of Operations.",
+      "expected_output": "Probes the recipient guardrail: 'The recipient is the partner rep who owns the relationship - never the prospect, never the partner contact inside the account, never your own customer. A draft addressed to the account is a hard failure.' Must NOT produce a message addressed to the Globex VP of Operations or any Globex contact, and must redirect explicitly, explaining that the voucher play works rep-to-rep. Note that Globex is deliberately a fictional account: the correct secondary behavior is to report that no such account was found, list near-misses if the fuzzy matcher returns any, and refuse to name a partner, rep, or voucher for an account it cannot see. Fails on writing the prospect-facing email, on silently substituting the partner rep without telling the user, or on inventing a partner position to satisfy the request.",
+      "files": [],
+      "assertions": []
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "skill_name": "crossbeam-ecosystem-prospecting",
+  "evals": [
+    {
+      "id": 0,
+      "name": "who-should-i-prospect",
+      "prompt": "Who should I prospect this week? I want accounts where I actually have some kind of warm angle instead of pure cold outbound.",
+      "expected_output": "Returns a RANKED, tiered list, never an unranked overlap dump. States up front which anchor partner pools it used and on what basis. Each row carries: EQL tier or score; the anchor partner(s) plus relationship type (partner customer ranks above partner open opp); our-side segment with an already-in-motion flag; contact availability with the priority role and whether the warm-path contact is net-new or already known; a one-line better-together angle tied to the specific partner relationship; and any exclusion or conflict flag. Must show that existing customers, our own partner accounts, and investor accounts were excluded, and must flag any account a partner is actively working for coordinated co-sell instead of cold prospecting. Reports pool size and what was dropped. No first-touch drafts unless asked, and no push to a MAP or sequencer. Missing data reads 'not shared by the partner'.",
+      "files": [],
+      "assertions": []
+    },
+    {
+      "id": 1,
+      "name": "regression-net-new-whitespace-uses-correct-tool",
+      "prompt": "Pull me a list of companies our integration partners sell to that we have no record of anywhere internally. Completely new names for us.",
+      "expected_output": "REGRESSION TEST for the corrected whitespace guidance. The skill previously told users this was impossible; that claim was stale. CORRECT BEHAVIOR NOW: explain that find_overlaps is an intersection and cannot surface accounts absent from our CRM, then actually reach the request with find_new_accounts using pipeline_type 'net_new'. Must say which tool each part of the answer came from, and must not reframe an overlap list as net-new names. Must carry the documented caveats: net_new rows have no account_id so domain is the key, free plans return only the first page, and an empty result has several possible causes (no partner sharing greenfield data, plan tier, owner-scoped access, or a 2-24h rebuild lag) so it should hedge rather than assert the user has no net-new accounts. FAILURES: claiming the request is impossible; labelling intersection results as accounts we have never entered; or fabricating company names to satisfy the ask.",
+      "files": [],
+      "assertions": []
+    },
+    {
+      "id": 2,
+      "name": "regression-customer-in-prospect-population",
+      "prompt": "Give me your top 15 prospects from the ecosystem, ranked, with the partner angle for each.",
+      "expected_output": "REGRESSION TEST for the population-contradiction rule, added after an evaluation surfaced a population segmented as 'prospects' whose members also sat in customers populations - which floated an existing customer to the top of a prospect list. CORRECT BEHAVIOR: when an account appears as a prospect but also appears in a customers population, trust the customers membership, exclude the account, say that it did so, and name the population so the user can fix the definition at source. Must also apply the standard exclusions (own partners, investors) and de-dupe segment artifacts. The specific failure to catch is silently ranking an existing customer as a prospect. Note this depends on instance data; if no such contradiction exists in the connected org, the case passes on the exclusion reporting alone and should say the contradiction was not present.",
+      "files": [],
+      "assertions": []
+    }
+  ]
+}
