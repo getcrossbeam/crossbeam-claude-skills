@@ -49,6 +49,19 @@ The [Crossbeam](https://www.crossbeam.com/) MCP returns partner overlaps, co-sel
 |---|---|
 | [Crossbeam API Guide](skills/crossbeam-api-guide/SKILL.md) | Routes any "how do I get Crossbeam data into X" question to the right access method — REST API, Webhooks/Signals, the MCP server, or in-app AI Chat — with the exact docs, scopes, and endpoints. |
 
+## Install in Claude Code
+
+This repo is also a Claude Code plugin, so Claude Code users can install all ten skills at once instead of downloading them individually. In Claude Code, run:
+
+```
+/plugin marketplace add getcrossbeam/crossbeam-claude-skills
+/plugin install crossbeam@crossbeam
+```
+
+Restart Claude Code, and the skills become available in every session — Claude picks the right one automatically based on what you ask. Use `/plugin` to browse or disable individual skills, and `claude plugin update crossbeam` to pull the latest version.
+
+Five of the skills (Co-Sell Copilot, Ecosystem Prospecting, Account Brief, Pipeline Prioritization, and Partner Alignment Outreach) read live partner data and need the [Crossbeam MCP server](https://help.crossbeam.com/en/articles/12601327-crossbeam-mcp-server-limited-availability) connected and authenticated. The plugin does not bundle it — connect it separately, and the skills will tell you if it's missing. The other five (ELG Advisor, Outreach Writer, LinkedIn Contact Search, Partner Pitch Builder, API Guide) are self-contained and work with no connector at all.
+
 ## Using a skill
 
 Each skill lives in its own folder under [`skills/`](skills/) as Markdown, so you can open and read any `SKILL.md` directly on GitHub. To use one in Claude (Claude Desktop, Claude Code, or the Claude API), ChatGPT, or other AI agents:

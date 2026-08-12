@@ -1,0 +1,15 @@
+{
+  "name": "crossbeam",
+  "description": "Crossbeam's Skills for partnership and go-to-market teams — partner overlap, co-sell context, and ecosystem signals brought into revenue workflows.",
+  "owner": {
+    "name": "Crossbeam",
+    "url": "https://www.crossbeam.com/"
+  },
+  "plugins": [
+    {
+      "name": "crossbeam",
+      "source": "./",
+      "category": "productivity"
+    }
+  ]
+}
