@@ -68,6 +68,10 @@ Each skill lives in its own folder under [`skills/`](skills/) as Markdown, so yo
 
 1. Download the full skill folder — not just the `SKILL.md` file. Some skills depend on files in the `references/` subfolder to work correctly. You can download a ready-to-use `.zip` for each skill from [crossbeam.com/claudeskills](https://www.crossbeam.com/claudeskills), or download the full folder from GitHub.
 2. Review and configure the skill to your needs. (Tip: Ask your AI tool for help with configuration.)
+
+   **Five skills will not run until you configure them.** Co-Sell Copilot, Ecosystem Prospecting, Account Brief, Pipeline Prioritization, and Partner Alignment Outreach each open with a Configuration block of `[fill in — …]` placeholders: where your account or deal list comes from, your ICP, your exclusions, your product name. Until you fill those in, these skills are designed to stop and ask rather than guess at a source — that is correct behavior, not a bug, but it does mean an unconfigured install looks like it is refusing to work. Fill in the Configuration block before sharing a skill with your team.
+
+   The other five (ELG Advisor, Outreach Writer, LinkedIn Contact Search, Partner Pitch Builder, API Guide) need no configuration and work as installed.
 3. Upload the skill following the instructions in your tools support docs
    -  [Claude's support docs](https://support.claude.ai/en/articles/10065836-using-skills-in-claude).
    -  [ChatGPT's support docs](https://help.openai.com/en/articles/20001066-skills-in-chatgpt).
@@ -76,6 +80,21 @@ Each skill lives in its own folder under [`skills/`](skills/) as Markdown, so yo
 https://github.com/user-attachments/assets/2837be4f-d9b8-4bec-b682-f40a2464ad48
 
 For details on connecting Crossbeam to Claude, review our [help documentation here](https://help.crossbeam.com).
+
+## Evals
+
+Every skill carries a test suite at `skills/<skill>/evals/evals.json` — 25 cases covering the
+main path each skill promises, the guardrails it commits to, and regression tests for defects
+we've already fixed.
+
+```bash
+python3 evals/run.py validate     # check every suite
+python3 evals/run.py list         # inventory all cases
+```
+
+If you edit a skill, run its cases before shipping — start with any named `regression-*`. See
+[`evals/README.md`](evals/README.md) for how to execute and grade a case, and why the executing
+agent must never see the grading rubric.
 
 ## Feedback
 

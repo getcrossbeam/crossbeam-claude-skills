@@ -50,7 +50,7 @@ you can, flagging which ones are assumptions rather than stated.
 - Programs that imply value ("Co-marketing fund" → "We invest in your pipeline")
 - Joint outcomes from case studies ("Partner closed 3 deals in Q1 via co-sell")
 - Reach signals (customer count, logos, segments, geographies a partner could access)
-- Ecosystem gravity (number of partners, marketplace traffic, category leadership)
+- Ecosystem pull (number of partners, marketplace traffic, category leadership)
 
 **7 partner value-prop types:**
 
@@ -66,7 +66,7 @@ you can, flagging which ones are assumptions rather than stated.
    dedicated partner team, training, sandbox ("Dedicated partner manager + MDF").
 6. **Differentiation** — how partnering sets the partner apart from competitors
    ("Be the only [category] tool certified for our platform").
-7. **Strategic & proof** — momentum, logos, category leadership, ecosystem gravity
+7. **Strategic & proof** — momentum, logos, category leadership, ecosystem scale
    that make the partnership a safe, credible bet ("Join 200+ partners in our network").
 
 ---

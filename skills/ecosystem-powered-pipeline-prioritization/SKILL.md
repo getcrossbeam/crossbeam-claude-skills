@@ -184,15 +184,34 @@ Capture: event type (deal opened / deal closed won / greenfield), partner name, 
 
 Score each account based on ecosystem signal strength. This scoring adds a dimension to the user's existing qualification logic — it doesn't replace it.
 
-**Signal scoring:**
-- +3 per partner with a deal closed won on this account in the lookback window
-- +2 per partner with an open opportunity on this account
-- +1 per partner with this account in any other population (prospect, etc.)
-- +2 bonus if the account has signals from 3 or more partners (convergence signal)
-- +1 bonus if any signal occurred in the last 14 days (recency bonus)
-- +2 bonus if the partner has a tag matching configured strategic partner tags
+**Score in-window motion, not static overlap breadth.** This is the difference between a scanner
+that works and one that just re-sorts your biggest accounts. Large, well-known companies overlap
+dozens of partners each. If per-partner population counts enter the score, that near-constant
+breadth term dominates and buries the deals you are scanning for.
 
-**Rank** accounts highest score first. Accounts with zero signals go to the bottom of the list — include them but mark as "no signals detected in window."
+**Signal scoring:**
+- +3 per partner with a deal **closed won** on this account inside the lookback window
+- +2 per partner with a deal **opened** on this account inside the lookback window
+- +2 per partner with a **currently open opportunity** on this account — **capped at +4 total**.
+  An open opp is real, but it is a standing state rather than new motion; two partners is enough
+  to establish it.
+- +2 bonus if 3 or more partners have **in-window activity** (convergence signal)
+- +1 bonus if any in-window event occurred in the last 14 days (recency bonus)
+- +2 per partner carrying a configured strategic partner tag — **capped at +4 total**
+
+**Populations do not score.** Membership in a prospect or other population earns zero. Overlap
+breadth is useful context, so report it next to the score ("38 overlapping partners") — never
+inside it.
+
+**Rank** accounts highest score first. Accounts with zero signals go to the bottom of the list —
+include them but mark as "no signals detected in window."
+
+**Check the ranking before you present it.** An account with no in-window partner activity must
+score 0 and must sort below every account that has any. If a zero-activity account outranks one
+with a live partner deal, the scoring has been misapplied — recompute rather than presenting it.
+Likewise, if event volume alone is floating an account to the top, look at what those events are:
+a stream of one- and two-seat add-ons at a partner's existing customer is not buying motion, and
+should not outrank a genuine new-business deal. Say so when you demote it.
 
 ---
 

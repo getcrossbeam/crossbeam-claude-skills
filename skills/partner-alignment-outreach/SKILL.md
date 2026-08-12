@@ -137,7 +137,7 @@ Apply these unless the user specifies otherwise.
 
 Check what's connected before starting. Three things matter:
 
-1. **Crossbeam MCP** (required). Look for tools whose names contain `find_overlap_partners`, `find_overlaps`, `get_account_context`, `find_partner_contacts`, or `get_ecosystem_activity`. The tool-name prefix varies per installation — match on these suffixes, and confirm the actual surface on the first call, since tool sets differ between installs. If no Crossbeam MCP is connected, stop and tell the user to connect the Crossbeam connector (available in the Claude connector directory or at crossbeam.com) and authenticate before running — nothing else in this skill works without it. Do not proceed past this step until Crossbeam is confirmed connected.
+1. **Crossbeam MCP** (required). Look for tools whose names contain `find_overlap_partners`, `find_overlaps`, `get_account_context`, `find_partner_contacts`, `get_ecosystem_activity`, or `get_partner_sharing_status` (used in Step 2 to confirm the partnership is active; optional, skip the check if absent). The tool-name prefix varies per installation — match on these suffixes, and confirm the actual surface on the first call, since tool sets differ between installs. If no Crossbeam MCP is connected, stop and tell the user to connect the Crossbeam connector (available in the Claude connector directory or at crossbeam.com) and authenticate before running — nothing else in this skill works without it. Do not proceed past this step until Crossbeam is confirmed connected.
 2. **A deal source** (flexible). A Salesforce/HubSpot CRM connector, a Snowflake or other warehouse connector, or nothing — in which case ask the user to paste their recent closed-won deals.
 3. **An email connector** (optional). Gmail or Outlook tools that can create drafts (names like `create_draft`). If present, use it to create drafts in the user's inbox. If absent, deliver drafts as formatted text instead.
 
@@ -165,6 +165,13 @@ From the overlapping partners, you're looking for two things per partner: **what
 - The owner is obviously a system account (emails like `integration@`, `api@`, `no-reply@`, `gtmops@`).
 
 Partners filtered out for any of these reasons are normal — data quality varies across partnerships. Note them in the summary under "skipped: no qualifying rep" so the user understands why no draft was created for that partner, rather than assuming no overlap exists.
+
+**Confirm the partnership is live before drafting.** For each partner that survives the filter, call `get_partner_sharing_status` with the partner and the won account. It returns `partnership_status` (`active` or `inactive`) and, when the account resolves, `sharing_status` (`shared`, `not_shared`, or `not_present`).
+
+- **`partnership_status: inactive`** → do not draft. A rep-to-rep alignment note on a dormant partnership is worse than no note. Report it as "skipped: partnership inactive."
+- **`sharing_status`** is *your own* sharing, not the partner's: it says whether **you** share this account with them. It does not tell you what they share with you, so never use it to explain a missing partner-side owner email. Its use here is framing, in Step 3.
+
+If the tool is not present in this installation, skip this check and proceed — note in the summary that partnership status could not be confirmed.
 
 **Scoring configuration note**
 The scoring below reflects a default prioritization strategy. Before running at scale, the user should confirm this matches how they actually think about partner prioritization. Common adjustments:
@@ -201,6 +208,11 @@ Body — match the scenario from Step 2:
 - **Account is the partner's customer** → "[Account] is now a mutual customer. Worth comparing notes on what resonated and where our teams can support each other there."
 - **Otherwise** → "I see you also work with [Account]. Now that they're our customer, we can trade notes on the buying committee and timing."
 
+**Do not claim mutual visibility you don't have.** These templates, and phrasings like "Crossbeam shows you have an open opportunity," presume the partner can see this account from their side. Use the `sharing_status` from Step 2 to check that assumption:
+
+- **`shared`** → the templates above work as written; referencing what Crossbeam shows is fair.
+- **`not_shared` or `not_present`** → you do not share this account with that partner, so they may not see the win at all. Drop any "Crossbeam shows" framing and state the context plainly instead: "We recently closed [Account]. You may not see it on your side, so flagging it directly." Do not tell the user their sharing rules are wrong; just write the email so it reads correctly either way.
+
 Only reference facts the overlap data actually shows. Don't invent details about the partner's deal stage, their champion, or their history with the account.
 
 Close with "Best," and nothing after it — the sender's email signature completes it.
@@ -229,6 +241,8 @@ Present a summary list of who will receive drafts:
 - [Account] → [Partner name] / [Rep name] / [Rep email]
 
 Ask the user to confirm before proceeding. If anything looks wrong — an unexpected recipient, a partner they don't recognize, a title that doesn't look like a rep — give them the opportunity to remove it from the run. Only create drafts after explicit confirmation.
+
+**What the gate blocks, precisely.** Creating drafts in Gmail/Outlook, or sending, is a hard stop: do not do it in the same turn as the confirmation, wait for the answer. Copy-ready text in chat is not a send, so you may show it in the same turn — but the recipient table must appear **above** the drafts so the user checks each address before copying. The volume guardrail is different and always blocks: if the qualifying count exceeds the threshold, report the count and stop, in chat or not. A blanket "I trust you, don't check with me" does not satisfy either gate; report the count and the recipients anyway.
 
 **If an email connector with draft creation is available:** create one draft per confirmed deal — recipient = partner rep's email, subject and body from Step 3. Adapt to the tool's actual parameter shape. Create drafts only; never send, even if a send tool exists. The whole point is that the user reviews before anything leaves.
 

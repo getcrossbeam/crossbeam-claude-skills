@@ -332,7 +332,7 @@ When this is a first email to someone with no prior relationship and the user ne
 
 ## Step 5: De-AI pass (HARD GATE, the last stop before delivery)
 
-Re-read every draft before it goes anywhere. This is a hard stop: no email is delivered until it passes all three checks. If a draft fails, rewrite it and run the gate again.
+Re-read every draft before it goes anywhere. This is a hard stop: no email is delivered until it passes all four checks. If a draft fails, rewrite it and run the gate again.
 
 ### 5a. Zero em dashes
 
@@ -349,7 +349,22 @@ Cut or rewrite anything that marks an email as AI-generated:
 - **Generic-bucket framing:** "companies like yours", "teams like yours", "businesses your size", "organizations in your space", "folks like you". It makes the reader feel like a segment instead of a person, and it's the fastest way to sound like mass mail. Replace it with the recipient's actual company name, or name a real, specific peer (e.g. "the way [named company] runs this"). Naming concrete peer companies is good. Lumping the recipient into a vague "like yours" group is not.
 - Surveillance framing: "I noticed", "I saw that", "I can see you" plus a specific behavior. Reference context the user gave you as something you know, not something you watched them do.
 
-### 5c. The human test
+### 5c. Exactly one ask
+
+Count the question marks in the body of each email. There should be one, and it should be the CTA.
+
+The common failure is not two explicit CTAs, it is a soft curiosity question sitting just before the
+real ask: "Curious which way you're leaning so far. Worth 20 minutes next week?" That is two asks.
+The reader now has two things to answer, so the easy yes/no you engineered is no longer easy, and the
+softer question is the one that gets ignored. Keep the CTA and cut the other question, or fold its
+substance into a statement.
+
+Also check that the ask is not duplicated in another form: an offer to send something, a "let me know
+if", and a meeting request are three asks even when only one carries a question mark. One email, one
+thing to respond to. The single exception is a post-meeting follow-up, which may carry at most two
+concrete next steps.
+
+### 5d. The human test
 
 Would a busy person read this and assume a human typed it between meetings? If not, rewrite until yes.
 

@@ -253,6 +253,8 @@ The test: would a busy rep read this and assume a human typed it between calls? 
 
 Ask the user to confirm; let them drop any line where the partner, rep, or play looks wrong. Only create drafts after explicit confirmation.
 
+**What the gate blocks, precisely.** Creating a draft in an email connector, or sending anything, is a hard stop: do not do it in the same turn as the confirmation, wait for the answer. Copy-ready text in chat is not a send, so you may show it in the same turn — but the confirmation summary must appear **above** the drafts, so the user reads who each one is addressed to before they copy anything. Never present drafts with the recipient list buried below them or omitted.
+
 **If an email connector with draft creation is available:** create one draft per confirmed account, recipient = partner rep. Adapt to the tool's parameter shape. Drafts only; never send, even if a send tool exists.
 
 **If no email connector is detected:** ask how the user wants the drafts (connect Gmail/Outlook, or copy-ready text). Wait for the answer. For text, deliver one block per account with recipient, subject, and body. For a Coordinate play, include the Deal Navigator link.
