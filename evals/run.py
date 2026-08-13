@@ -140,6 +140,16 @@ def validate():
             if isinstance(prompt, str) and slug in prompt:
                 problems.append(f"{label}: prompt names the skill slug; executors must be blind")
 
+            # This repo is public. A case whose prompt carries placeholders must explain
+            # what to substitute, or whoever runs it will paste the placeholder verbatim.
+            expected = case.get("expected_output")
+            if placeholders(prompt) and isinstance(expected, str):
+                if "SUBSTITUTION REQUIRED" not in expected:
+                    problems.append(
+                        f"{label}: prompt has placeholders {placeholders(prompt)} but "
+                        "expected_output lacks a 'SUBSTITUTION REQUIRED' note"
+                    )
+
     print(f"{suite_total} suite(s), {case_total} case(s)")
     if problems:
         print(f"\n{len(problems)} problem(s):", file=sys.stderr)
@@ -185,8 +195,26 @@ def get_case(skill, case_id):
     sys.exit(f"error: no skill named {skill!r}")
 
 
+def placeholders(text):
+    """Placeholder tokens like <ACCOUNT_1> that must be substituted before running."""
+    return sorted(set(re.findall(r"<[A-Z][A-Z0-9_]*>", text or "")))
+
+
 def emit_prompt(skill, case_id):
     skill_dir, case = get_case(skill, case_id)
+
+    found = placeholders(case["prompt"])
+    if found:
+        # This repo is public, so no customer account names are committed. Cases that
+        # need real accounts ship placeholders instead.
+        print("!" * 72)
+        print("SUBSTITUTE BEFORE RUNNING:", ", ".join(found))
+        print("This case needs real accounts from your own Crossbeam instance. The repo")
+        print("ships placeholders so no customer data is committed. See the case's")
+        print("expected_output for what to pick, or `run.py rubric` to print it.")
+        print("!" * 72)
+        print()
+
     print(EXECUTOR_TEMPLATE.format(
         skill_md=(skill_dir / "SKILL.md"),
         prompt=case["prompt"],

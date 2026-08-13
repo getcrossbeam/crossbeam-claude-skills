@@ -67,6 +67,29 @@ Every case is read-only by construction: no sends, no inbox drafts, no CRM or se
 Skills that normally create drafts are constrained to chat output. Keep it that way — an eval
 suite that mails real partner reps is worse than no eval suite.
 
+## No customer data in this repo
+
+This repository is public. **No account names, partner names, contacts, metrics, or report
+links from a real Crossbeam instance belong in a skill or an eval fixture.** Retrieving that
+data at runtime is the whole point of these skills; committing it as content is not.
+
+Cases that genuinely need a real account ship a placeholder instead:
+
+```
+<ACCOUNT>      a single account
+<ACCOUNT_1>…   a list of accounts
+```
+
+Substitute your own before running. Each such case says in its `expected_output` what kind of
+account to pick, because the choice affects whether the case tests anything — the scoring
+regression, for example, is meaningless unless one of your accounts has high partner overlap
+but no recent activity. `run.py prompt` prints a warning listing any placeholders it finds,
+and `run.py validate` fails a case that has placeholders without a substitution note.
+
+Company names that appear literally in fixtures are **invented** and meant not to resolve to a
+real business. If one collides with a real company, rename it — a fixture that attaches a
+fabricated scenario to a real named company is the same problem in a different direction.
+
 ## Before you run
 
 Five skills need the Crossbeam MCP connected and authenticated (Co-Sell Copilot, Ecosystem
@@ -76,9 +99,11 @@ than skill behavior. Those five also need their Configuration block filled in �
 cases that deliberately test the unconfigured hard-stop, which must be run against an
 unconfigured copy.
 
-Some cases name deliberately fictional accounts (Globex, Northwind Logistics, Halden Freight,
-Vantiq) to test whether a skill invents data for something it cannot find. Do not "fix" these
-to real accounts; refusing to fabricate is the behavior under test.
+Some cases name deliberately fictional companies (Globex, Kestrelline, Sableway Logistics,
+Halden Freight, Calderon Health, Northmark) to test whether a skill invents data for something
+it cannot find. Do not "fix" these to real accounts and do not substitute placeholders for them
+— refusing to fabricate is the behavior under test, and it only works if the company genuinely
+does not resolve.
 
 ## Writing a new case
 

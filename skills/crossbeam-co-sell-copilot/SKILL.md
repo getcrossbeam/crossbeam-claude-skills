@@ -7,7 +7,7 @@ description: >
   the partner contact and the right play (intro, intel, a backchannel reference, a voucher for urgency, a joint-deal
   coordination, or a marketplace co-sell), and drafts the ask with something to offer back. Read-only and draft-only:
   it hands off to your CRM, chat, or co-sell workspace and never sends. Use whenever a rep wants help on a deal or
-  account, including asks like "who can help me win Verizon", "I need a partner intro", "no partner attached", "deals
+  account, including asks like "who can help me win Northmark", "I need a partner intro", "no partner attached", "deals
   stuck in stage 3", "how do I break into Acme", or "create urgency without discounting". The user does not need to
   mention partners. Always use this skill to win, unblock, or break into accounts with a partner.
 ---
@@ -18,7 +18,7 @@ Win, unblock, or break into an account with a partner: find who can help, work o
 
 ## What it does
 
-1. Takes whatever you give it — a single account ("who can help me win Verizon", "break into Acme"), a pipeline filter ("deals stuck in stage 3"), or a list — and resolves it against your CRM, or against the connected partner-ecosystem data if you have no CRM
+1. Takes whatever you give it — a single account ("who can help me win Northmark", "break into Acme"), a pipeline filter ("deals stuck in stage 3"), or a list — and resolves it against your CRM, or against the connected partner-ecosystem data if you have no CRM
 2. Consults your other GTM context if you have it installed — sales playbook, ICP, voice skill — so the play and the wording match how your team sells
 3. Finds which partner is best positioned on each account and qualifies how strong that position really is
 4. Works out the specific play: intro to a stakeholder you are missing, intel on how the account buys, a backchannel reference, a voucher for urgency, coordinating a joint deal, or a marketplace co-sell — and flags when no partner adds anything
@@ -33,7 +33,7 @@ Read-only and draft-only. Nothing is sent; you review every draft and the actual
 - **Crossbeam connector** — the source of partner position, contacts, and activity. Connect from the Claude connector directory or at crossbeam.com. Authenticate to the right org before running. The skill will not run without it.
 
 **For the accounts or deals — any one of these works**
-- A specific account or deal named in your request ("who can help me win Verizon", "help me on the Acme deal")
+- A specific account or deal named in your request ("who can help me win Northmark", "help me on the Acme deal")
 - A pipeline filter ("deals stuck in stage 3", "open enterprise deals closing this quarter")
 - A pasted list, a CRM report, or a warehouse query
 
@@ -78,7 +78,7 @@ Where give-and-get balance per partner lives, if anywhere. Leave blank if not tr
 
 ## How to run it
 
-- **Single account, plain language:** "Who can help me win Verizon?" / "How do I break into Acme?"
+- **Single account, plain language:** "Who can help me win Northmark?" / "How do I break into Acme?"
 - **Stuck pipeline:** "I have 5 deals stuck in stage 3, can you help me unlock them?"
 - **No partner attached:** "This opp hit solution review with no partner — what now?"
 - **Urgency:** "Create urgency on the Globex deal without discounting"
@@ -161,7 +161,7 @@ Detect, do not interrogate. Only ask if there is genuinely no way to get the acc
 
 Detect the input shape, resolve to a concrete set, and confirm anything fuzzy before spending tool calls.
 
-- **Shape A — a single named account or deal** ("who can help me win Verizon", "break into Acme", "help me on the Globex deal"). Resolve that one.
+- **Shape A — a single named account or deal** ("who can help me win Northmark", "break into Acme", "help me on the Globex deal"). Resolve that one.
 - **Shape B — a pipeline filter** ("deals stuck in stage 3", "open enterprise deals closing this quarter"). Turn it into a concrete list, then confirm.
 - **Shape C — an explicit list** (pasted, a CRM report, a configured view). Use it directly.
 
