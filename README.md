@@ -98,7 +98,7 @@ agent must never see the grading rubric.
 
 ## Feedback
 
-Have feedback or a use case we haven't built yet? Share it with our team [here](https://docs.google.com/forms/d/e/1FAIpQLScPr15cLPv3HZniTbid7QBXraCLPBAP8rJGB-fxDEzMWw_Wjg/formResponse)
+Have feedback or a use case we haven't built yet? Share it with our team [here](https://docs.google.com/forms/d/e/1FAIpQLScPr15cLPv3HZniTbid7QBXraCLPBAP8rJGB-fxDEzMWw_Wjg/viewform)
 
 ## License
 
