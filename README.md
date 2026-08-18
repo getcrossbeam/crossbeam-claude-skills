@@ -83,7 +83,7 @@ For details on connecting Crossbeam to Claude, review our [help documentation he
 
 ## Evals
 
-Every skill carries a test suite at `skills/<skill>/evals/evals.json` — 25 cases covering the
+Every skill carries a test suite at `skills/<skill>/evals/evals.json` — 26 cases covering the
 main path each skill promises, the guardrails it commits to, and regression tests for defects
 we've already fixed.
 

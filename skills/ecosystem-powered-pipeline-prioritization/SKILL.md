@@ -164,7 +164,9 @@ If strategic partner tags are configured, filter in the same call — this tool 
 ```
 find_overlap_partners(account_id: "<record_id>", partner_tag_name: "<tag>")
 ```
-An ambiguous tag returns `ClarificationRequired` with candidates; resolve it once at the start of the scan and reuse the confirmed `partner_tag_id` for every remaining account rather than re-prompting per account. If no tags are configured, omit the tag argument to get every partner that shares the account.
+An ambiguous tag returns `ClarificationRequired` with candidates; resolve it once at the start of the scan and reuse the confirmed `partner_tag_id` for every remaining account rather than re-prompting per account.
+
+**`partner_tag_name` takes a single tag, not a list.** Configuration invites several (e.g. "Tier 1, Co-Sell"). If more than one is configured, make one call per tag and union the results by partner before scoring. Passing only the first tag silently drops partners carrying only the others, and because those partners' signals then never enter scoring, the account can be reported as "no signals detected in window" when it actually has some. If no tags are configured, omit the tag argument to get every partner that shares the account.
 
 Capture: partner name, population name (interpret intent over exact string — "Pipeline", "Active Opportunities" = open opportunity; "Clients", "Active Customers" = customer).
 
@@ -189,15 +191,23 @@ that works and one that just re-sorts your biggest accounts. Large, well-known c
 dozens of partners each. If per-partner population counts enter the score, that near-constant
 breadth term dominates and buries the deals you are scanning for.
 
-**Signal scoring:**
+**Signal scoring. Only in-window motion originates a score:**
 - +3 per partner with a deal **closed won** on this account inside the lookback window
 - +2 per partner with a deal **opened** on this account inside the lookback window
+- +2 bonus if 3 or more partners have **in-window activity** (convergence signal)
+- +1 bonus if any in-window event occurred in the last 14 days (recency bonus)
+
+**Modifiers. These apply only to an account that already scored above zero** on the terms above.
+They separate accounts that both have motion; they can never lift a dormant account above an
+active one. If an account has no in-window activity, skip this block entirely.
 - +2 per partner with a **currently open opportunity** on this account — **capped at +4 total**.
   An open opp is real, but it is a standing state rather than new motion; two partners is enough
   to establish it.
-- +2 bonus if 3 or more partners have **in-window activity** (convergence signal)
-- +1 bonus if any in-window event occurred in the last 14 days (recency bonus)
 - +2 per partner carrying a configured strategic partner tag — **capped at +4 total**
+
+**An account with no in-window partner activity scores exactly 0.** Standing open opportunities
+and strategic tags do not change that, because gating them is the only thing that makes the
+ranking check below actually hold.
 
 **Populations do not score.** Membership in a prospect or other population earns zero. Overlap
 breadth is useful context, so report it next to the score ("38 overlapping partners") — never

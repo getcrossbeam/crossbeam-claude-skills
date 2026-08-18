@@ -1,6 +1,6 @@
 # Evals
 
-Each skill carries its own suite at `skills/<skill>/evals/evals.json`. There are 25 cases
+Each skill carries its own suite at `skills/<skill>/evals/evals.json`. There are 26 cases
 across the 10 skills.
 
 ```bash

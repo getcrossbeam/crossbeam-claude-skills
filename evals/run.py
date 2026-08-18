@@ -143,7 +143,7 @@ def validate():
             # This repo is public. A case whose prompt carries placeholders must explain
             # what to substitute, or whoever runs it will paste the placeholder verbatim.
             expected = case.get("expected_output")
-            if placeholders(prompt) and isinstance(expected, str):
+            if isinstance(prompt, str) and placeholders(prompt) and isinstance(expected, str):
                 if "SUBSTITUTION REQUIRED" not in expected:
                     problems.append(
                         f"{label}: prompt has placeholders {placeholders(prompt)} but "
@@ -197,7 +197,9 @@ def get_case(skill, case_id):
 
 def placeholders(text):
     """Placeholder tokens like <ACCOUNT_1> that must be substituted before running."""
-    return sorted(set(re.findall(r"<[A-Z][A-Z0-9_]*>", text or "")))
+    if not isinstance(text, str):
+        return []
+    return sorted(set(re.findall(r"<[A-Z][A-Z0-9_]*>", text)))
 
 
 def emit_prompt(skill, case_id):

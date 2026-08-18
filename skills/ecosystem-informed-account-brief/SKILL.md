@@ -130,6 +130,8 @@ find_overlap_partners(account_id: "<record_id>", partner_tag_name: "<tag>")
 ```
 An ambiguous tag returns `ClarificationRequired` with candidates; present them and retry with `partner_tag_id`. If no tags are configured, omit the tag argument to get every partner that shares the account.
 
+**`partner_tag_name` takes a single tag, not a list.** Configuration invites several (e.g. "Tier 1, Co-Sell"), so if more than one is configured you cannot pass them in one call. Make one call per configured tag and union the results by partner, de-duplicating. Passing only the first tag silently drops partners that carry only the others, which shows up as partners missing from the brief rather than as an error.
+
 For each match capture: partner name, population name, and partner owner name if available. Do not surface partner owner contact details (email, phone) in the brief. If a signal suggests a partner motion, note in NEXT STEPS that partner owner contact details are available but recommend coordinating with their partnerships lead before reaching out — they may already have an active relationship or motion with this partner.
 
 **3c — Get ecosystem activity signals**
