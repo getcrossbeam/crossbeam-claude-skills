@@ -12,6 +12,8 @@ description: >
   skill for ecosystem prospecting and lead prioritization rather than a raw data lookup.
 ---
 
+<readme>
+
 # Ecosystem Prospecting (powered by Crossbeam)
 
 Turn your partner ecosystem into a ranked prospecting list: who to work now, why each one, and the warm way in.
@@ -95,7 +97,13 @@ Where the list should go — a MAP, a sequencer, a CSV, or just the chat.
 
 All partner data comes from what your partners have shared with you in Crossbeam under your sharing rules. The skill only surfaces what is already visible to you, never guesses at data a partner has not shared, and never sends or pushes anything without your review.
 
----
+</readme>
+
+<instructions>
+
+> **Structural tags.** `<readme>`, `<instructions>`, and `<output_template>` delimit sections of
+> this file for the agent reading it. They are not content: never echo a tag in your output, and
+> where an `<output_template>` is given, reproduce what it contains without the surrounding tags.
 
 ## Technical Reference
 
@@ -122,7 +130,7 @@ Implements ELG plays P7, P8, P11, and P12. Play records and the foundations subs
 **Anchor partners / partner tag (optional):** [fill in — partners or a tag whose customers fit the product. Blank = infer from the prompt.]
 **Exclusions (recommended):** [fill in — your own partner accounts and investor accounts; never prospect these]
 **Destination (optional):** [fill in — MAP/sequencer, CSV, or chat]
-**Your company / product name:** [fill in — your own product, e.g. Acme Analytics]
+**Your company / product name:** [fill in — your own product, e.g. the name your reps use for it]
 
 ## Verified tool surface
 
@@ -249,3 +257,5 @@ Works as a weekly "who's new / who heated up" pass. Offer once to schedule after
 - Every angle rests on a real better-together truth. Proof points persuade only, always attributed, never invented.
 - Generic and vendor-neutral. No publisher-internal product or skill names. The Crossbeam brand (skill name, "powered by Crossbeam"), Crossbeam MCP tool names, and public case-study companies are fine — the shared interface and public proof every installer has.
 - Prospect lists and partner data are sensitive — keep them out of any output not going to the user.
+
+</instructions>

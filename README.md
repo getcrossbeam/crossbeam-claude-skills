@@ -64,7 +64,7 @@ Five of the skills (Co-Sell Copilot, Ecosystem Prospecting, Account Brief, Pipel
 
 ## Using a skill
 
-Each skill lives in its own folder under [`skills/`](skills/) as Markdown, so you can open and read any `SKILL.md` directly on GitHub. To use one in Claude (Claude Desktop, Claude Code, or the Claude API), ChatGPT, or other AI agents:
+Each skill lives in its own folder under [`skills/`](skills/) as Markdown, so you can open and read any `SKILL.md` directly on GitHub. Inside each file, `<readme>`, `<instructions>`, and `<output_template>` tags mark which part is written for you and which part is written for the agent — GitHub hides the tags when it renders the page, so you see the sections, not the markup. To use one in Claude (Claude Desktop, Claude Code, or the Claude API), ChatGPT, or other AI agents:
 
 1. Download the full skill folder — not just the `SKILL.md` file. Some skills depend on files in the `references/` subfolder to work correctly. You can download a ready-to-use `.zip` for each skill from [crossbeam.com/claudeskills](https://www.crossbeam.com/claudeskills), or download the full folder from GitHub.
 2. Review and configure the skill to your needs. (Tip: Ask your AI tool for help with configuration.)

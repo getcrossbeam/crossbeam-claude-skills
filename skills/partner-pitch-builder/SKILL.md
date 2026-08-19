@@ -11,6 +11,12 @@ description: >
   Needs pasted content or a fetchable public URL; cannot read gated partner portals.
 ---
 
+<instructions>
+
+> **Structural tags.** `<readme>`, `<instructions>`, and `<output_template>` delimit sections of
+> this file for the agent reading it. They are not content: never echo a tag in your output, and
+> where an `<output_template>` is given, reproduce what it contains without the surrounding tags.
+
 # Ecosystem Value Proposition Lister — Why partners should bet on you
 
 You are a partner-ecosystem positioning analyst. You extract every reason a
@@ -77,6 +83,9 @@ Scale the output to what you actually found — don't pad. If a category has no
 real evidence, omit it rather than inventing entries.
 
 ---
+
+<output_template>
+
 # Partner Value Proposition Inventory: [Company Name]
 *Sources: [list] | Date: [date] | Total identified: [X]*
 
@@ -140,7 +149,8 @@ real evidence, omit it rather than inventing entries.
 **Underutilized:** [Strong partner proof points buried off the program page — elevate]
 **Missing:** [Value props competitors' partner programs offer that aren't addressed]
 **Conflicts:** [Inconsistencies between the program page, marketplace, and case studies]
----
+
+</output_template>
 
 ---
 
@@ -154,3 +164,5 @@ Before delivering:
 - Linked value props to joint proof where it exists?
 - Flagged inferred vs. stated props honestly?
 - Provided channel-ready snippets for partner outreach and the program page?
+
+</instructions>

@@ -99,11 +99,25 @@ than skill behavior. Those five also need their Configuration block filled in �
 cases that deliberately test the unconfigured hard-stop, which must be run against an
 unconfigured copy.
 
-Some cases name deliberately fictional companies (Globex, Kestrelline, Sableway Logistics,
-Halden Freight, Calderon Health, Northmark) to test whether a skill invents data for something
-it cannot find. Do not "fix" these to real accounts and do not substitute placeholders for them
-— refusing to fabricate is the behavior under test, and it only works if the company genuinely
-does not resolve.
+Some cases name companies that must **not** resolve, and they all use the `Example *` prefix —
+Example Software, Example Freight, Example Logistics, Example Health, Example Corp. Do not "fix"
+these to real accounts and do not substitute placeholders for them: these cases only test what
+they claim to while the company genuinely does not resolve.
+
+The `Example *` convention is deliberate. Earlier versions of these fixtures used invented-sounding
+names, several of which turned out to belong to real businesses — which both misrepresents a real
+company in a public repo and quietly breaks the test, because a resolvable company gives the agent
+real facts to pull. A name nobody can mistake for a business is the only version that stays correct.
+
+What each is for differs, so don't assume they all probe fabrication: **Example Logistics** is the
+fabrication-refusal case (the user admits knowing nothing past the title), **Example Corp** probes
+Co-Sell Copilot's recipient guardrail, **Example Health** is the Step 5c one-ask regression, and
+**Example Software** and **Example Freight** carry user-supplied context the draft must stay inside.
+
+Two cases need the opposite — a real, resolvable company — and mark it with a `SUBSTITUTION
+REQUIRED` note rather than shipping one: LinkedIn Contact Search case 0 (`<COMPANY>`, which must
+surface actual named individuals) and Partner Pitch Builder case 0 (`<PARTNER_PROGRAM_URL>`, which
+needs real page content to extract from).
 
 ## Writing a new case
 

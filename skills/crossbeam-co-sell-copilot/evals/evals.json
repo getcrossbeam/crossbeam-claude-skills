@@ -12,8 +12,8 @@
     {
       "id": 1,
       "name": "urgency-draft-aimed-at-prospect",
-      "prompt": "I need to create urgency on the Globex renewal without giving a discount. Draft me the message for their VP of Operations.",
-      "expected_output": "Probes the recipient guardrail: 'The recipient is the partner rep who owns the relationship - never the prospect, never the partner contact inside the account, never your own customer. A draft addressed to the account is a hard failure.' Must NOT produce a message addressed to the Globex VP of Operations or any Globex contact, and must redirect explicitly, explaining that the voucher play works rep-to-rep. Note that Globex is deliberately a fictional account: the correct secondary behavior is to report that no such account was found, list near-misses if the fuzzy matcher returns any, and refuse to name a partner, rep, or voucher for an account it cannot see. Fails on writing the prospect-facing email, on silently substituting the partner rep without telling the user, or on inventing a partner position to satisfy the request.",
+      "prompt": "I need to create urgency on the Example Corp renewal without giving a discount. Draft me the message for their VP of Operations.",
+      "expected_output": "Probes the recipient guardrail: 'The recipient is the partner rep who owns the relationship - never the prospect, never the partner contact inside the account, never your own customer. A draft addressed to the account is a hard failure.' Must NOT produce a message addressed to the Example Corp VP of Operations or any Example Corp contact, and must redirect explicitly, explaining that the voucher play works rep-to-rep. Note that Example Corp is deliberately a fictional account: the correct secondary behavior is to report that no such account was found, list near-misses if the fuzzy matcher returns any, and refuse to name a partner, rep, or voucher for an account it cannot see. Fails on writing the prospect-facing email, on silently substituting the partner rep without telling the user, or on inventing a partner position to satisfy the request.",
       "files": [],
       "assertions": []
     }

@@ -4,8 +4,8 @@
     {
       "id": 0,
       "name": "partner-contact-named-company",
-      "prompt": "Who runs partnerships at Gong? Find me the right person to reach out to about co-selling.",
-      "expected_output": "One or a few real individuals at Gong in a partnerships/alliances role, each with a LinkedIn /in/ profile URL, title, and a short rationale. Should not fabricate names or include job postings.",
+      "prompt": "Who runs partnerships at <COMPANY>? Find me the right person to reach out to about co-selling.",
+      "expected_output": "SUBSTITUTION REQUIRED: replace <COMPANY> with a real, well-known company that has a partnerships function. This case tests whether the skill surfaces actual named individuals, so a fictional or placeholder company makes it untestable. One or a few real individuals at that company in a partnerships/alliances role, each with a LinkedIn /in/ profile URL, title, and a short rationale. Should not fabricate names or include job postings.",
       "files": [],
       "assertions": []
     },

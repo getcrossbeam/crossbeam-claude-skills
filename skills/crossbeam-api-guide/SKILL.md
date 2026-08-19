@@ -16,6 +16,12 @@ description: >-
   Crossbeam data. Always use this skill before answering from memory.
 ---
 
+<instructions>
+
+> **Structural tags.** `<readme>`, `<instructions>`, and `<output_template>` delimit sections of
+> this file for the agent reading it. They are not content: never echo a tag in your output, and
+> where an `<output_template>` is given, reproduce what it contains without the surrounding tags.
+
 # Crossbeam API & Data-Access Guide
 
 Crossbeam exposes its Ecosystem Intelligence (partner overlaps, populations,
@@ -115,3 +121,5 @@ per-endpoint docs are authoritative and list the required scope for each call.
 - For AI agents that just need to *read and reason*, **MCP is almost always less
   work than the REST API** — don't send someone to build an OAuth integration when
   the connector would do.
+
+</instructions>

@@ -17,10 +17,16 @@ description: >-
   ranks, and presents on its own.
 ---
 
+<instructions>
+
+> **Structural tags.** `<readme>`, `<instructions>`, and `<output_template>` delimit sections of
+> this file for the agent reading it. They are not content: never echo a tag in your output, and
+> where an `<output_template>` is given, reproduce what it contains without the surrounding tags.
+
 # LinkedIn Search (ecosystem-led)
 
 Find specific people on LinkedIn and rank them for an ecosystem-led-growth play.
-This skill turns a loose ask ("who runs partnerships at Gong?", "find me 10
+This skill turns a loose ask ("who runs partnerships at Reveal?", "find me 10
 RevOps leaders at mid-market fintechs") into a clean, ranked list of real
 individuals with their LinkedIn profile URLs and, for each, the *ecosystem
 angle*: why they matter and how a shared partner could warm the introduction.
@@ -81,8 +87,8 @@ just can't do the discovery step itself.
 **PARTNER mode** — find the right contact(s) at a *named* company. The company is
 known; the job is to surface the person who owns a function — usually
 Partnerships / alliances / channel / ecosystem (the core ELG persona), but it can
-be any role. Triggers: "who runs partnerships at HubSpot", "find the alliances
-lead at Snowflake", "who should I talk to at Okta about co-selling". This is the
+be any role. Triggers: "who runs partnerships at Reveal", "find the alliances
+lead at Pace", "who should I talk to at Trace about co-selling". This is the
 heart of ecosystem-led discovery.
 
 **PROSPECT mode** — net-new discovery by ICP. The user describes a *type* of
@@ -200,3 +206,5 @@ tools they have; this skill does not depend on them.
 See `references/persona-queries.md` for title sets and query recipes for the
 personas ecosystem-led teams search most (Partnerships/alliances, RevOps, Sales
 leadership, founders/execs).
+
+</instructions>

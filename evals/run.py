@@ -57,9 +57,16 @@ def discover():
             continue
         try:
             with suite_path.open(encoding="utf-8") as fh:
-                yield skill_dir, suite_path, json.load(fh), None
+                suite = json.load(fh)
         except json.JSONDecodeError as exc:
             yield skill_dir, suite_path, None, f"invalid JSON: {exc}"
+            continue
+        # Every consumer treats a suite as a mapping, so reject any other shape here
+        # rather than letting it reach them as an AttributeError.
+        if not isinstance(suite, dict):
+            yield skill_dir, suite_path, None, "top level must be an object"
+            continue
+        yield skill_dir, suite_path, suite, None
 
 
 def frontmatter_name(skill_dir):
@@ -82,10 +89,6 @@ def validate():
         if error:
             problems.append(f"{rel}: {error}")
             continue
-        if not isinstance(suite, dict):
-            problems.append(f"{rel}: top level must be an object")
-            continue
-
         suite_total += 1
 
         declared = suite.get("skill_name")
@@ -202,8 +205,19 @@ def placeholders(text):
     return sorted(set(re.findall(r"<[A-Z][A-Z0-9_]*>", text)))
 
 
+def require(case, skill, case_id, *keys):
+    """Exit with the file's usual error style instead of a bare KeyError traceback."""
+    missing = [k for k in keys if not isinstance(case.get(k), str)]
+    if missing:
+        sys.exit(
+            f"error: {skill} case {case_id} is missing {', '.join(missing)} "
+            "— run `run.py validate` to see every problem in the suite"
+        )
+
+
 def emit_prompt(skill, case_id):
     skill_dir, case = get_case(skill, case_id)
+    require(case, skill, case_id, "prompt")
 
     found = placeholders(case["prompt"])
     if found:
@@ -226,7 +240,8 @@ def emit_prompt(skill, case_id):
 
 def emit_rubric(skill, case_id):
     _, case = get_case(skill, case_id)
-    print(f"# {skill} / [{case['id']}] {case['name']}\n")
+    require(case, skill, case_id, "name", "prompt", "expected_output")
+    print(f"# {skill} / [{case.get('id')}] {case['name']}\n")
     print("## Prompt given to the executor\n")
     print(case["prompt"] + "\n")
     print("## Grading rubric (never show this to the executor)\n")

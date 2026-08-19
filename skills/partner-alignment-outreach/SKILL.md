@@ -3,6 +3,8 @@ name: partner-alignment-outreach
 description: Turn recent closed-won deals into partner-alignment outreach. Pulls closed-won deals from the user's CRM or warehouse (Salesforce, HubSpot, Snowflake, or a pasted list), uses the Crossbeam MCP to find which partners overlap each won account and who owns the relationship on the partner side, then drafts a short alignment email to each partner rep — as Gmail/Outlook drafts if an email connector is available, otherwise as ready-to-copy drafts. Use whenever someone wants to notify partners about closed-won deals, run post-win co-sell follow-up, "let partners know we won X", "draft partner outreach for recent wins", set up weekly partner-alignment outreach, or align with partner reps after deals close — even if they don't mention Crossbeam, overlaps, or email explicitly.
 ---
 
+<readme>
+
 # Partner Alignment Outreach
 
 Turn recent closed-won deals into partner alignment emails — one per deal, addressed to the right rep at the right partner.
@@ -94,7 +96,13 @@ All overlap data comes from what your partners have chosen to share with you in 
 
 If you're unsure how to connect a tool, find your Crossbeam partner tags, or adapt the defaults for your team's workflow, just ask Claude — it can walk you through any of it.
 
----
+</readme>
+
+<instructions>
+
+> **Structural tags.** `<readme>`, `<instructions>`, and `<output_template>` delimit sections of
+> this file for the agent reading it. They are not content: never echo a tag in your output, and
+> where an `<output_template>` is given, reproduce what it contains without the surrounding tags.
 
 ## Technical Reference
 
@@ -170,6 +178,8 @@ Partners filtered out for any of these reasons are normal — data quality varie
 
 - **`partnership_status: inactive`** → do not draft. A rep-to-rep alignment note on a dormant partnership is worse than no note. Report it as "skipped: partnership inactive."
 - **`sharing_status`** is *your own* sharing, not the partner's: it says whether **you** share this account with them. It does not tell you what they share with you, so never use it to explain a missing partner-side owner email. Its use here is framing, in Step 3.
+- **`ClarificationRequired`** → the partner name, the account, or both resolved to zero or several candidates, so neither status field comes back. Do not read that as inactive and do not drop the partner. Because this call runs once per surviving partner per won deal, an ambiguous partner name would otherwise prompt the user once per deal: resolve each ambiguous name **once**, reuse the confirmed IDs for every remaining deal in the run, and treat any name still unresolved as "status unconfirmed" — draft it under the unconfirmed rule below.
+- **No `sharing_status` in the response** (the account did not resolve, or the tool returned only `partnership_status`) → treat it as unconfirmed rather than as `not_shared`, and use the unconfirmed wording in Step 3.
 
 If the tool is not present in this installation, skip this check and proceed — note in the summary that partnership status could not be confirmed.
 
@@ -212,6 +222,7 @@ Body — match the scenario from Step 2:
 
 - **`shared`** → the templates above work as written; referencing what Crossbeam shows is fair.
 - **`not_shared` or `not_present`** → you do not share this account with that partner, so they may not see the win at all. Drop any "Crossbeam shows" framing and state the context plainly instead: "We recently closed [Account]. You may not see it on your side, so flagging it directly." Do not tell the user their sharing rules are wrong; just write the email so it reads correctly either way.
+- **Unconfirmed** (tool absent, `ClarificationRequired`, or no `sharing_status` returned) → write it the same way as `not_shared`. Plain framing reads correctly whether or not the partner can see the account, so it is the safe default when you do not know; "Crossbeam shows" is the only phrasing that needs `shared` to be true.
 
 Only reference facts the overlap data actually shows. Don't invent details about the partner's deal stage, their champion, or their history with the account.
 
@@ -271,3 +282,5 @@ This works well as a weekly cadence (e.g., Monday mornings, catching the prior w
 - Drafts only. Never send email.
 - Only surface partner data that Crossbeam's sharing rules already expose to this user — never speculate about partner data you can't see.
 - Deal amounts and account lists are sensitive; keep them out of any output that isn't going to the user themselves.
+
+</instructions>

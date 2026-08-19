@@ -14,6 +14,8 @@ description: >
   from your closed-won deals, use partner-alignment-outreach instead.
 ---
 
+<readme>
+
 # README: Outbound Email Writer
 
 Write outbound emails that sound like a sharp rep typed them quickly, not like a template. Single email or a full sequence, any motion, no setup required.
@@ -36,7 +38,7 @@ If all you have is a company name and a title, that's enough to start. The draft
 
 ## How to run it
 
-> "Write a cold email to the Head of Partnerships at Acme"
+> "Write a cold email to the Head of Partnerships at [Company]"
 > "Draft a re-engagement email to a customer who's gone quiet"
 > "Write me a 3-email sequence for [person] at [company] about [reason]"
 > "Improve this email: [paste]"
@@ -56,7 +58,13 @@ You'll be asked one thing up front: single email, 3-email sequence, or 7-email s
 
 Just start with the company and the person's title and say what you're trying to do. It will ask for anything else it needs, and it will tell you where it's working from persona alone versus a real signal you provided.
 
----
+</readme>
+
+<instructions>
+
+> **Structural tags.** `<readme>`, `<instructions>`, and `<output_template>` delimit sections of
+> this file for the agent reading it. They are not content: never echo a tag in your output, and
+> where an `<output_template>` is given, reproduce what it contains without the surrounding tags.
 
 # Skill Instructions
 
@@ -454,3 +462,5 @@ Looking forward to working together.
 ```
 
 Both examples obey the rules in Steps 4 and 5: no em dashes, one CTA, a specific subject, and no machine-written filler. Adapt the placeholders to the real situation, and never invent the peer names, the use case, or the activity, use only what the user gave you or what you verified in Step 1f.
+
+</instructions>

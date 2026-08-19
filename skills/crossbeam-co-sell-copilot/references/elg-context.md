@@ -44,19 +44,19 @@ This skill is **read-only**: every tool is a `find_*` / `get_*`. It produces int
 
 ## Play records this skill runs
 
-**P19. No-partner-attached alert** · Trigger: an opp reaches mid/late stage with no partner attached. · Cell: my opp × partner customers/opps. · Tools: `find_partner_recommendations`. · Action: surface candidate partners; prompt the rep — "what do you need from partner A/B/C to progress this?" · Proof: Intercom no-partner-attached push.
+**P19. No-partner-attached alert** · Trigger: an opp reaches mid/late stage with no partner attached. · Cell: my opp × partner customers/opps. · Tools: `find_partner_recommendations`. · Action: surface candidate partners; prompt the rep — "what do you need from partner A/B/C to progress this?"
 
-**P20. Partner intro request** · Trigger: rep needs partner help on a specific account (intel, intro, procurement) — whether breaking in or progressing. · Cell: my opp × partner customers. · Tools: `find_partner_contacts`, `find_partner_recommendations`. · Action: identify the right partner and contact; package the request (account, partner type, the ask); route it. · Proof: Intercom partnership-requests channel.
+**P20. Partner intro request** · Trigger: rep needs partner help on a specific account (intel, intro, procurement) — whether breaking in or progressing. · Cell: my opp × partner customers. · Tools: `find_partner_contacts`, `find_partner_recommendations`. · Action: identify the right partner and contact; package the request (account, partner type, the ask); route it.
 
 **P21. Co-sell joint opportunity** · Trigger: both you and a partner are selling the same account. · Cell: my opp × partner opp. · Tools: `find_partner_recommendations`, `find_partner_contacts`, and a Deal Navigator link tool if the install exposes one. · Action: align deal teams, agree a next-best-action on the better-together story, track in the co-sell workspace. · Proof: co-sold deals close faster, win more, larger ACV, retain better.
 
-**P22. Partner intel gathering** · Trigger: a deal in flight where a partner already has the account. · Cell: my opp × partner customer. · Tools: `find_partner_contacts`. · Action: ask the partner rep how the prospect buys — procurement, pricing dynamics, decision-makers, gotchas; feed the rep, adjust forecast. · Proof: Census — 34% higher ACV on partner-influenced deals.
+**P22. Partner intel gathering** · Trigger: a deal in flight where a partner already has the account. · Cell: my opp × partner customer. · Tools: `find_partner_contacts`. · Action: ask the partner rep how the prospect buys — procurement, pricing dynamics, decision-makers, gotchas; feed the rep, adjust forecast. · Proof: partner-influenced deals carry higher ACV (general ELG finding).
 
-**P23. Backchannel reference** · Trigger: a late-stage deal needs a credibility push. · Cell: my opp × partner customer. · Tools: `find_partner_contacts`. · Action: ask a partner with a strong relationship at the account to endorse you. · Proof: Census — a partner endorsement closes deals.
+**P23. Backchannel reference** · Trigger: a late-stage deal needs a credibility push. · Cell: my opp × partner customer. · Tools: `find_partner_contacts`. · Action: ask a partner with a strong relationship at the account to endorse you. · Proof: a credible partner endorsement shortens late-stage deals (general ELG finding).
 
-**P24. Partner vouchers** · Trigger: an open opp that is an existing customer of a partner; need urgency without discounting yourself. · Cell: my opp × partner customer. · Tools: `find_partner_recommendations`. · Action: let the partner extend an initial discount/voucher so they look like the hero and create urgency. · Proof: Chili Piper — 2× ACV, 90% close, half the sales cycle.
+**P24. Partner vouchers** · Trigger: an open opp that is an existing customer of a partner; need urgency without discounting yourself. · Cell: my opp × partner customer. · Tools: `find_partner_recommendations`. · Action: let the partner extend an initial discount/voucher so they look like the hero and create urgency. · Proof: a partner-extended voucher creates urgency without discounting your own price (general ELG finding).
 
-**P26. Hyperscaler marketplace co-sell** · Trigger: the deal can transact via AWS/GCP/Azure marketplace. · Cell: my opp × hyperscaler customers. · Tools: `find_overlaps` (account resolution via the `find_*` fuzzy match). · Action: identify marketplace overlap, run rep-to-rep alignment and co-sell; leverage simplified procurement, committed-spend drawdown, seller assist. · Proof: cloud marketplaces ~$50B throughput by end-2025; 5–10% take rate.
+**P26. Hyperscaler marketplace co-sell** · Trigger: the deal can transact via a hyperscaler cloud marketplace. · Cell: my opp × hyperscaler customers. · Tools: `find_overlaps` (account resolution via the `find_*` fuzzy match). · Action: identify marketplace overlap, run rep-to-rep alignment and co-sell; leverage simplified procurement, committed-spend drawdown, seller assist. · Proof: cloud marketplaces ~$50B throughput by end-2025; 5–10% take rate.
 
 **P25. Cross-sell into your customer (the reciprocal give)** · Trigger: reciprocity — a partner is pursuing one of your customers, or you want something to offer back. · Cell: my customer × partner opp. · Tools: `find_overlaps`. · Action: offer to help the partner sell or expand into one of your customers; deepens the better-together story and fuels the value loop. · Proof: the AMM reciprocal cell.
 
@@ -65,10 +65,11 @@ This skill is **read-only**: every tool is a `find_*` / `get_*`. It produces int
 ## Proof library (use only to persuade; always attribute; never invent or reattribute)
 
 - Co-sold deals close faster, win more, carry larger ACV, retain better (general ELG finding).
-- Census: 34% higher ACV on partner-influenced deals.
-- Chili Piper partner vouchers: 2× ACV, 90% close rate, half the sales cycle.
-- Branch: 40% faster close, 44% more pipeline, 50% larger deal size.
 - Cloud marketplaces: ~$50B throughput by end-2025; 5–10% take rate.
+
+Named customer results are deliberately not stored here. To cite a specific company's
+numbers, find a current published case study first and attribute it to that source — never
+recall one from memory, and never attach a metric to a company you have not just verified.
 
 ---
 

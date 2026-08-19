@@ -32,9 +32,9 @@ Title variants:
 
 PARTNER mode (named company):
 ```
-site:linkedin.com/in "Head of Partnerships" "Acme Corp"
-site:linkedin.com/in "VP Partnerships" "Acme Corp"
-site:linkedin.com/in "Strategic Alliances" "Acme Corp"
+site:linkedin.com/in "Head of Partnerships" "[Company Name]"
+site:linkedin.com/in "VP Partnerships" "[Company Name]"
+site:linkedin.com/in "Strategic Alliances" "[Company Name]"
 ```
 
 PROSPECT mode (ICP):
@@ -55,7 +55,7 @@ Title variants:
 - `"GTM Operations"`, `"Go-to-Market Operations"`
 
 ```
-site:linkedin.com/in "Revenue Operations" "Acme Corp"
+site:linkedin.com/in "Revenue Operations" "[Company Name]"
 site:linkedin.com/in "Director of Revenue Operations" SaaS "New York"
 ```
 
@@ -70,7 +70,7 @@ Title variants:
 - `"Regional Sales Director"`, `"Sales Director"`
 
 ```
-site:linkedin.com/in "Chief Revenue Officer" "Acme Corp"
+site:linkedin.com/in "Chief Revenue Officer" "[Company Name]"
 site:linkedin.com/in "VP Sales" "Series B" SaaS
 ```
 
@@ -84,7 +84,7 @@ Title variants:
 - `"President"`, `"COO"`, `"Chief Operating Officer"`
 
 ```
-site:linkedin.com/in "Co-Founder" "Acme Corp"
+site:linkedin.com/in "Co-Founder" "[Company Name]"
 site:linkedin.com/in "CEO" "vertical SaaS" "Austin"
 ```
 
