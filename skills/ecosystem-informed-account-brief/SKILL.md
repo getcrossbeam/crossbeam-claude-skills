@@ -55,7 +55,8 @@ After your first run, ask Claude to help you refine any sections based on what w
 ## What to expect
 
 - **Ecosystem intelligence called out explicitly** — where Crossbeam data changes the picture (a partner with an open deal, a greenfield signal, a risk from ecosystem movement), the brief calls it out rather than burying it.
-- **Crossbeam-only runs:** the brief works without account or sales intelligence sources configured — you'll still get full ecosystem intelligence. Adding those sources layers in account context that makes the ecosystem signals more actionable.
+- **Crossbeam-only runs:** the brief works without account or sales intelligence sources configured — you'll still get full ecosystem intelligence. Adding those sources layers in account context that makes the ecosystem signals more actionable. A blank Configured sources field is never a reason to halt: the brief runs on Crossbeam alone and says which sources were missing.
+- **Partner contact details:** partner owner contact information exists in Crossbeam but is not surfaced directly in the brief. Where an ecosystem signal suggests a partner play, the brief recommends looping in your partnerships lead, who holds the relationship context and can make the right introduction.
 - **Missing sources:** the brief notes what wasn't configured rather than failing.
 - **No ecosystem relationships found:** normal for some accounts. The brief notes it clearly.
 - **One-off lookups** aren't what this skill is for — ask Claude to query your source directly.

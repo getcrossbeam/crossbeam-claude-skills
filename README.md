@@ -5,7 +5,8 @@ The Crossbeam team has created ready-made Skills for partnership and go-to-marke
 Every skill is a set of agent instructions and resources packaged in a plain Markdown file (`.md`) so you can **read it directly here on
 GitHub** before you ever load it into Claude, ChatGPT, or your AI tool of choice. Each skill lives in its own folder
 under [`skills/`](skills/) with a `SKILL.md` (the skill itself) plus any
-supporting `references/` and `README.md` files.
+supporting `references/` files. Everything a human needs to set the skill up lives in the `<readme>`
+section at the top of its `SKILL.md`, so there is one file to read and one file to keep current.
 
 **MCP connections provide data to your agents; Skills provide the judgment and the Ecosystem-Led Growth best practices.**
 The [Crossbeam](https://www.crossbeam.com/) MCP returns partner overlaps, co-sell context, and ecosystem signals. These skills encode an expert workflow on top of it: which partner to work and why, the right play, the next best action to take. 

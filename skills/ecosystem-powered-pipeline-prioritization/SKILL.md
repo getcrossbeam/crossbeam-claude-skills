@@ -85,7 +85,13 @@ Decide where the ranked list gets delivered. Think about who needs to see it and
 
 > **Fill in before sharing:** `Output destination: [e.g. in-chat / Slack channel / Google Doc / slide deck / other]`
 
-**Step 6 — Run it once and adjust**
+**Step 6 — Set your volume confirmation threshold (optional)**
+If your account list is large, this sets the point at which the scanner pauses and asks you to confirm before scanning. It is worth setting if you are pointing the skill at a broad segment and want to avoid accidentally running across thousands of accounts on a first try. Leave it blank for no limit.
+
+> **Fill in before sharing:** `Volume confirmation threshold: [e.g. 100 accounts — or leave blank for no limit]`
+
+**Step 7 — Run it once and adjust**
+After a first run, ask Claude to help you refine the scoring weights, change the lookback window, or trim the output format to what your team actually reads.
 
 ## How to run it
 

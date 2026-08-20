@@ -63,6 +63,11 @@ Or you can skip this and the skill will consider all partners equally.
 | Max deals per run | [e.g. 100] |
 | Emails per deal | [e.g. 1 — best-positioned partner rep only] |
 | Strategic partner tags | [e.g. none — all partners weighted equally] |
+| Volume confirmation threshold | [e.g. 25 deals] |
+
+The volume confirmation threshold is a safety check. If more deals qualify than this number, the skill
+stops, reports the count, and waits for you to confirm before generating anything. It exists so a run
+against an unintended scope cannot quietly turn into a bulk batch.
 
 ## How to run it
 
@@ -82,7 +87,10 @@ Mix and match any of these in a single request.
 
 - **Deals with no overlap:** normal outcome. Not every won account has a partner in Crossbeam. These are noted in the summary.
 - **Overlaps with no owner email:** also normal. Partner data quality varies — some partners don't share owner fields. The skill filters these out and explains why in the summary so you're not left wondering why a particular partner was skipped.
-- **Multiple overlapping partners per deal:** the skill picks the single best-positioned rep based on partner population (open opportunity > customer > prospect), owner title, and whether the partner matches your strategic tags. One draft per deal.
+- **Multiple overlapping partners per deal:** the skill picks the single best-positioned rep based on partner population (open opportunity > customer > prospect), owner title, and whether the partner matches your strategic tags. One draft per deal. That ordering is a default, not a fixed rule: if you care more about mutual-customer alignment than co-sell pipeline, say so and the skill will reweight for the session.
+- **Recipient confirmation:** before any drafts are created, the skill shows you who it plans to write to, one line per deal. Nothing is generated until you confirm, and you can drop anyone who looks wrong from the run.
+- **Volume check:** if more deals qualify than your confirmation threshold, the skill reports the count and stops rather than proceeding.
+- **No email connector:** drafts come back as copy-ready text in chat instead of landing in your inbox. Nothing is ever sent either way.
 
 ## Setting it up as a recurring run
 
