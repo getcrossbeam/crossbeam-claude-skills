@@ -8,8 +8,21 @@
   "plugins": [
     {
       "name": "crossbeam-skills",
+      "displayName": "Crossbeam Skills",
       "source": "./",
-      "category": "productivity"
+      "description": "Ready-made Claude Skills for partnership and go-to-market teams. Brings partner overlap, co-sell context, and ecosystem signals from Crossbeam into revenue workflows.",
+      "category": "productivity",
+      "keywords": [
+        "crossbeam",
+        "partnerships",
+        "ecosystem-led-growth",
+        "elg",
+        "co-sell",
+        "go-to-market",
+        "sales",
+        "prospecting",
+        "partner-data"
+      ]
     }
   ]
 }
