@@ -120,7 +120,7 @@ The flow: resolve the account(s)/deal(s) -> for each, find positioned partners a
 
 ## ELG plays
 
-This skill implements ELG plays P19, P20, P21, P22, P23, P24, P26, and the reciprocal give P25. The play records and the foundations subset this skill needs are embedded in `references/elg-context.md` — read it before executing. It is a compiled subset of `elg-plays-catalog 06-25-26 V2` and `elg-foundations 06-25-26 V2`; if those change at the source, recompile it.
+This skill implements ELG plays P19, P20, P21, P22, P23, P24, P26, and the reciprocal give P25. The play records and the foundations subset this skill needs are embedded in `references/elg-context.md` — read it before executing. It is a self-contained subset of Crossbeam's ELG plays and foundations, not the full catalog.
 
 How the plays map to the play classification in Step 3:
 - **No partner attached** at a mid/late stage: surface candidates and ask the rep what they need to progress — **P19**.

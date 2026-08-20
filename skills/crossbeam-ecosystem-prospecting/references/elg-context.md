@@ -1,6 +1,8 @@
 # ELG context — Ecosystem Prospecting (compiled subset)
 
-Compiled from `elg-plays-catalog 06-25-26 V2` and `elg-foundations 06-25-26 V2`, with the tool surface and mechanics corrected against the live Crossbeam MCP. A self-contained subset for this skill only. If the source changes, recompile.
+A self-contained subset of Crossbeam's ELG plays and foundations, covering only what this skill
+runs, with the tool surface and mechanics verified against the live Crossbeam MCP. It is not the
+full catalog.
 
 ---
 

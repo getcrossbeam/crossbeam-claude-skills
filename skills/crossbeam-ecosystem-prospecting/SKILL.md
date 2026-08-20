@@ -115,7 +115,7 @@ The flow: read the prompt and **select the anchor partner pools** -> pull our pr
 
 ## ELG plays
 
-Implements ELG plays P7, P8, P11, and P12. Play records and the foundations subset are embedded in `references/elg-context.md` — read it before executing. Compiled from `elg-plays-catalog 06-25-26 V2` and `elg-foundations 06-25-26 V2`; recompile if the source changes.
+Implements ELG plays P7, P8, P11, and P12. Play records and the foundations subset are embedded in `references/elg-context.md` — read it before executing. It is a self-contained subset of Crossbeam's ELG plays and foundations, not the full catalog.
 
 - **EQL generation (P7)** — surface prospects exhibiting ecosystem behaviour: Steps 1-2.
 - **Second-party enrichment (P8)** — replace third-party firmographics with partner context: Step 5.

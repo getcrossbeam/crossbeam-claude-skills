@@ -1,7 +1,7 @@
 # ELG context — Co-Sell Copilot (compiled subset)
 
-Compiled from `elg-plays-catalog 06-25-26 V2` and `elg-foundations 06-25-26 V2`.
-This is a self-contained subset for this skill only — the plays it runs and the foundations it needs. It is not the full catalog. If the source catalog or foundations change, recompile this file. Do not treat it as the master.
+A self-contained subset of Crossbeam's ELG plays and foundations, covering only what this skill
+runs: the plays it executes and the foundations it needs. It is not the full catalog.
 
 ---
 
