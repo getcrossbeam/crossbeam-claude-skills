@@ -55,10 +55,10 @@ This repo is also a Claude Code plugin, so Claude Code users can install all ten
 
 ```
 /plugin marketplace add getcrossbeam/crossbeam-claude-skills
-/plugin install crossbeam@crossbeam
+/plugin install crossbeam-skills@crossbeam
 ```
 
-Restart Claude Code, and the skills become available in every session — Claude picks the right one automatically based on what you ask. Use `/plugin` to browse or disable individual skills, and `claude plugin update crossbeam` to pull the latest version.
+Restart Claude Code, and the skills become available in every session — Claude picks the right one automatically based on what you ask. Use `/plugin` to browse or disable individual skills, and `claude plugin update crossbeam-skills` to pull the latest version.
 
 Five of the skills (Co-Sell Copilot, Ecosystem Prospecting, Account Brief, Pipeline Prioritization, and Partner Alignment Outreach) read live partner data and need the [Crossbeam MCP server](https://help.crossbeam.com/en/articles/12601327-crossbeam-mcp-server-limited-availability) connected and authenticated. The plugin does not bundle it — connect it separately, and the skills will tell you if it's missing. The other five (ELG Advisor, Outreach Writer, LinkedIn Contact Search, Partner Pitch Builder, API Guide) are self-contained and work with no connector at all.
 

@@ -7,7 +7,7 @@
   },
   "plugins": [
     {
-      "name": "crossbeam",
+      "name": "crossbeam-skills",
       "source": "./",
       "category": "productivity"
     }

@@ -1,7 +1,7 @@
 {
-  "name": "crossbeam",
+  "name": "crossbeam-skills",
   "description": "Ready-made Claude Skills for partnership and go-to-market teams. Brings partner overlap, co-sell context, and ecosystem signals from Crossbeam into revenue workflows — co-sell plays, ecosystem-qualified prospecting, account briefs, pipeline prioritization, and partner outreach.",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "author": {
     "name": "Crossbeam",
     "url": "https://www.crossbeam.com/"
