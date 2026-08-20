@@ -12,6 +12,16 @@ The [Crossbeam](https://www.crossbeam.com/) MCP returns partner overlaps, co-sel
 
 **Note: Skills can be used across different AI tools, not just Claude or ChatGPT. The format is an open standard, so the skills you see here can also work with other AI platforms that support skills or building agents using natural language. If you’re using a different AI tool, check their docs for instructions on how to set up and use skills there.**
 
+## What are Skills?
+
+A Skill is a saved, reusable package of instructions your AI tool fires automatically when it
+recognizes the task. A prompt is a one-time instruction: next time you want to complete that
+same task, you start over.
+
+A skill is the next step. You identify a recurring task or workflow, create a skill for it, and
+load it in once. From there, the agent reads what you're asking, decides which skill applies,
+and executes. You describe the task in plain language and the saved playbook fires.
+
 ## Available Skills
 
 ### Co-sell & prospecting
