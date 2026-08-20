@@ -5,12 +5,23 @@ The Crossbeam team has created ready-made Skills for partnership and go-to-marke
 Every skill is a set of agent instructions and resources packaged in a plain Markdown file (`.md`) so you can **read it directly here on
 GitHub** before you ever load it into Claude, ChatGPT, or your AI tool of choice. Each skill lives in its own folder
 under [`skills/`](skills/) with a `SKILL.md` (the skill itself) plus any
-supporting `references/` and `README.md` files.
+supporting `references/` files. Everything a human needs to set the skill up lives in the `<readme>`
+section at the top of its `SKILL.md`, so there is one file to read and one file to keep current.
 
 **MCP connections provide data to your agents; Skills provide the judgment and the Ecosystem-Led Growth best practices.**
 The [Crossbeam](https://www.crossbeam.com/) MCP returns partner overlaps, co-sell context, and ecosystem signals. These skills encode an expert workflow on top of it: which partner to work and why, the right play, the next best action to take. 
 
 **Note: Skills can be used across different AI tools, not just Claude or ChatGPT. The format is an open standard, so the skills you see here can also work with other AI platforms that support skills or building agents using natural language. If you’re using a different AI tool, check their docs for instructions on how to set up and use skills there.**
+
+## What are Skills?
+
+A Skill is a saved, reusable package of instructions your AI tool fires automatically when it
+recognizes the task. A prompt is a one-time instruction: next time you want to complete that
+same task, you start over.
+
+A skill is the next step. You identify a recurring task or workflow, create a skill for it, and
+load it in once. From there, the agent reads what you're asking, decides which skill applies,
+and executes. You describe the task in plain language and the saved playbook fires.
 
 ## Available Skills
 
@@ -49,12 +60,29 @@ The [Crossbeam](https://www.crossbeam.com/) MCP returns partner overlaps, co-sel
 |---|---|
 | [Crossbeam API Guide](skills/crossbeam-api-guide/SKILL.md) | Routes any "how do I get Crossbeam data into X" question to the right access method — REST API, Webhooks/Signals, the MCP server, or in-app AI Chat — with the exact docs, scopes, and endpoints. |
 
+## Install in Claude Code
+
+This repo is also a Claude Code plugin, so Claude Code users can install all ten skills at once instead of downloading them individually. In Claude Code, run:
+
+```
+/plugin marketplace add getcrossbeam/crossbeam-claude-skills
+/plugin install crossbeam-skills@crossbeam
+```
+
+Restart Claude Code, and the skills become available in every session — Claude picks the right one automatically based on what you ask. Use `/plugin` to browse or disable individual skills, and `claude plugin update crossbeam-skills` to pull the latest version.
+
+Five of the skills (Co-Sell Copilot, Ecosystem Prospecting, Account Brief, Pipeline Prioritization, and Partner Alignment Outreach) read live partner data and need the [Crossbeam MCP server](https://help.crossbeam.com/en/articles/12601327-crossbeam-mcp-server-limited-availability) connected and authenticated. The plugin does not bundle it — connect it separately, and the skills will tell you if it's missing. The other five (ELG Advisor, Outreach Writer, LinkedIn Contact Search, Partner Pitch Builder, API Guide) are self-contained and work with no connector at all.
+
 ## Using a skill
 
-Each skill lives in its own folder under [`skills/`](skills/) as Markdown, so you can open and read any `SKILL.md` directly on GitHub. To use one in Claude (Claude Desktop, Claude Code, or the Claude API), ChatGPT, or other AI agents:
+Each skill lives in its own folder under [`skills/`](skills/) as Markdown, so you can open and read any `SKILL.md` directly on GitHub. Inside each file, `<readme>`, `<instructions>`, and `<output_template>` tags mark which part is written for you and which part is written for the agent — GitHub hides the tags when it renders the page, so you see the sections, not the markup. To use one in Claude (Claude Desktop, Claude Code, or the Claude API), ChatGPT, or other AI agents:
 
 1. Download the full skill folder — not just the `SKILL.md` file. Some skills depend on files in the `references/` subfolder to work correctly. You can download a ready-to-use `.zip` for each skill from [crossbeam.com/claudeskills](https://www.crossbeam.com/claudeskills), or download the full folder from GitHub.
 2. Review and configure the skill to your needs. (Tip: Ask your AI tool for help with configuration.)
+
+   **Five skills will not run until you configure them.** Co-Sell Copilot, Ecosystem Prospecting, Account Brief, Pipeline Prioritization, and Partner Alignment Outreach each open with a Configuration block of `[fill in — …]` placeholders: where your account or deal list comes from, your ICP, your exclusions, your product name. Until you fill those in, these skills are designed to stop and ask rather than guess at a source — that is correct behavior, not a bug, but it does mean an unconfigured install looks like it is refusing to work. Fill in the Configuration block before sharing a skill with your team.
+
+   The other five (ELG Advisor, Outreach Writer, LinkedIn Contact Search, Partner Pitch Builder, API Guide) need no configuration and work as installed.
 3. Upload the skill following the instructions in your tools support docs
    -  [Claude's support docs](https://support.claude.ai/en/articles/10065836-using-skills-in-claude).
    -  [ChatGPT's support docs](https://help.openai.com/en/articles/20001066-skills-in-chatgpt).
@@ -64,6 +92,25 @@ https://github.com/user-attachments/assets/2837be4f-d9b8-4bec-b682-f40a2464ad48
 
 For details on connecting Crossbeam to Claude, review our [help documentation here](https://help.crossbeam.com).
 
+## Evals
+
+Every skill carries a test suite at `skills/<skill>/evals/evals.json` — 26 cases covering the
+main path each skill promises, the guardrails it commits to, and regression tests for defects
+we've already fixed.
+
+```bash
+python3 evals/run.py validate     # check every suite
+python3 evals/run.py list         # inventory all cases
+```
+
+If you edit a skill, run its cases before shipping — start with any named `regression-*`. See
+[`evals/README.md`](evals/README.md) for how to execute and grade a case, and why the executing
+agent must never see the grading rubric.
+
 ## Feedback
 
-Have feedback or a use case we haven't built yet? Share it with our team [here](https://docs.google.com/forms/d/e/1FAIpQLScPr15cLPv3HZniTbid7QBXraCLPBAP8rJGB-fxDEzMWw_Wjg/formResponse)
+Have feedback or a use case we haven't built yet? Share it with our team [here](https://docs.google.com/forms/d/e/1FAIpQLScPr15cLPv3HZniTbid7QBXraCLPBAP8rJGB-fxDEzMWw_Wjg/viewform)
+
+## License
+
+Released under the [MIT License](LICENSE).

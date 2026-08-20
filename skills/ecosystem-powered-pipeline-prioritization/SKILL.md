@@ -3,6 +3,8 @@ name: ecosystem-powered-pipeline-prioritization
 description: Scans a configured list of accounts for Crossbeam ecosystem intelligence and signals — partner deal activity, overlap populations, and recent partner movements — then ranks accounts by signal strength and surfaces the ones worth acting on. Optionally generates an outreach angle per account based on the ecosystem context. Use whenever someone wants to scan accounts for partner signals, prioritize their pipeline using ecosystem data, run a daily or weekly signal scan, or identify which accounts have buying motion their team can't see. Not for one-off account lookups — use the Ecosystem-Informed Account Brief for that.
 ---
 
+<readme>
+
 # README — Ecosystem-Powered Pipeline Prioritization
 
 Find the accounts on your list that are worth acting on now — surfaced by real partner deal activity, not modeled intent.
@@ -83,7 +85,13 @@ Decide where the ranked list gets delivered. Think about who needs to see it and
 
 > **Fill in before sharing:** `Output destination: [e.g. in-chat / Slack channel / Google Doc / slide deck / other]`
 
-**Step 6 — Run it once and adjust**
+**Step 6 — Set your volume confirmation threshold (optional)**
+If your account list is large, this sets the point at which the scanner pauses and asks you to confirm before scanning. It is worth setting if you are pointing the skill at a broad segment and want to avoid accidentally running across thousands of accounts on a first try. Leave it blank for no limit.
+
+> **Fill in before sharing:** `Volume confirmation threshold: [e.g. 100 accounts — or leave blank for no limit]`
+
+**Step 7 — Run it once and adjust**
+After a first run, ask Claude to help you refine the scoring weights, change the lookback window, or trim the output format to what your team actually reads.
 
 ## How to run it
 
@@ -107,7 +115,17 @@ Just ask Claude — it can walk you through connecting tools, finding your Cross
 
 
 
----
+## A note on the data
+
+All partner data comes from what your partners have shared with you in Crossbeam under your sharing rules. The skill only surfaces what is already visible to you, and never guesses at data a partner has not shared.
+
+</readme>
+
+<instructions>
+
+> **Structural tags.** `<readme>`, `<instructions>`, and `<output_template>` delimit sections of
+> this file for the agent reading it. They are not content: never echo a tag in your output, and
+> where an `<output_template>` is given, reproduce what it contains without the surrounding tags.
 
 # Skill Instructions
 
@@ -148,29 +166,39 @@ For each account, collect at minimum: account name and domain. Domain makes Cros
 
 For each account on the list, run the following. If the account isn't found in Crossbeam, note it and move to the next — don't stop the scan.
 
+> **Tool names:** the Crossbeam MCP tool-name prefix varies per installation (e.g. `Crossbeam:`, `mcp__Crossbeam__`). Match on the suffixes below rather than the full name, and confirm the actual tool surface on the first call — tool sets differ between installs.
+
 **2a — Resolve the account in Crossbeam**
 ```
-Crossbeam:get_own_account_info(account_domain: "example.com")
+get_account_context(account_domain: "example.com")
 ```
-Extract the `record_id`.
+Accepts `account_domain`, `account_name` (fuzzy), or `account_id`. Domain is the most reliable. Extract the account's CRM `record_id` / `account_id` — Step 2c needs it.
 
 **2b — Get partner overlap**
 ```
-Crossbeam:get_account_overlap_info(account_id: "<record_id>")
+find_overlap_partners(account_id: "<record_id>", limit: 100)
 ```
-If strategic partner tags are configured, also call:
+**Always pass `limit`.** The tool defaults to `limit: 10`, so an account overlapping more partners than that silently returns only the first page, with no error and no truncation flag. Pass `limit: 100` and paginate with `page` until the partner list is complete.
+
+If strategic partner tags are configured, filter in the same call — this tool takes the tag directly, so no second call and no manual intersect is needed:
 ```
-Crossbeam:find_partners(partner_tag_id: "<tag_id>")
+find_overlap_partners(account_id: "<record_id>", partner_tag_name: "<tag>", limit: 100)
 ```
-Then intersect — keep only overlaps where the partner matches a tagged partner. If no tags configured, use all overlapping partners.
+An ambiguous tag returns `ClarificationRequired` with candidates; resolve it once at the start of the scan and reuse the confirmed `partner_tag_id` for every remaining account rather than re-prompting per account.
+
+**`partner_tag_name` takes a single tag, not a list.** Configuration invites several (e.g. "Tier 1, Co-Sell"). If more than one is configured, make one call per tag and union the results by partner before scoring. Passing only the first tag silently drops partners carrying only the others, and because those partners' signals then never enter scoring, the account can be reported as "no signals detected in window" when it actually has some. If no tags are configured, omit the tag argument to get every partner that shares the account.
 
 Capture: partner name, population name (interpret intent over exact string — "Pipeline", "Active Opportunities" = open opportunity; "Clients", "Active Customers" = customer).
 
 **2c — Get ecosystem activity signals**
 ```
-Crossbeam:get_ecosystem_activity(account_domain: "example.com")
+get_ecosystem_activity(record_ids: ["<record_id>"], resource_type: "accounts")
 ```
-Filter to the configured lookback window. If strategic partner tags are configured, filter to those partners by name. Resolve any ClarificationRequired before proceeding.
+This tool filters by CRM **record ID**, not by domain — use the `record_id` from Step 2a. Optionally narrow with `partner_names` / `partner_ids`, or with `event_types`, whose valid values are `partner_deal_opened`, `partner_deal_closed_won`, and `partner_greenfield_deal_closed_won`. If strategic partner tags are configured, pass the tagged partner names from Step 2b.
+
+**Resolve `partner_names` before the scan, then pass `partner_ids`.** If any name resolves to zero or multiple partners the tool returns `ClarificationRequired` and **no events at all** — which this step would otherwise read as "no activity" and score 0, producing the exact false negative Step 2b warns about. Resolve the tagged partner names once at the start of the scan, then pass the confirmed `partner_ids` for every account, so an ambiguous name cannot re-prompt once per account across a long run.
+
+**The tool has no date-range parameter** — it returns events newest first. Apply the configured lookback window yourself by discarding events older than it, and paginate (`page`, `limit`) only until events fall outside the window.
 
 Capture: event type (deal opened / deal closed won / greenfield), partner name, date, contact name and title if available.
 
@@ -180,21 +208,58 @@ Capture: event type (deal opened / deal closed won / greenfield), partner name, 
 
 Score each account based on ecosystem signal strength. This scoring adds a dimension to the user's existing qualification logic — it doesn't replace it.
 
-**Signal scoring:**
-- +3 per partner with a deal closed won on this account in the lookback window
-- +2 per partner with an open opportunity on this account
-- +1 per partner with this account in any other population (prospect, etc.)
-- +2 bonus if the account has signals from 3 or more partners (convergence signal)
-- +1 bonus if any signal occurred in the last 14 days (recency bonus)
-- +2 bonus if the partner has a tag matching configured strategic partner tags
+**Score in-window motion, not static overlap breadth.** This is the difference between a scanner
+that works and one that just re-sorts your biggest accounts. Large, well-known companies overlap
+dozens of partners each. If per-partner population counts enter the score, that near-constant
+breadth term dominates and buries the deals you are scanning for.
 
-**Rank** accounts highest score first. Accounts with zero signals go to the bottom of the list — include them but mark as "no signals detected in window."
+**Signal scoring. Only in-window motion originates a score:**
+- +3 per partner with a deal **closed won** on this account inside the lookback window
+- +2 per partner with a deal **opened** on this account inside the lookback window
+- +2 bonus if 3 or more partners have **in-window activity** (convergence signal)
+- +1 bonus if any in-window event occurred in the last 14 days (recency bonus)
+
+**Modifiers. These apply only to an account that already scored above zero** on the terms above.
+They separate accounts that both have motion; they can never lift a dormant account above an
+active one. If an account has no in-window activity, skip this block entirely.
+- +2 per partner with a **currently open opportunity** on this account — **capped at +4 total**.
+  An open opp is real, but it is a standing state rather than new motion; two partners is enough
+  to establish it. **Count only partners whose open opportunity was not already scored as an
+  in-window `deal opened` above.** A deal opened in the window and still open is one event, not two;
+  scoring it in both places lets recent opens outrank closed-won, inverting the priority below.
+- +2 per partner carrying a configured strategic partner tag — **capped at +4 total**
+
+**An account with no in-window partner activity scores exactly 0.** Standing open opportunities
+and strategic tags do not change that, because gating them is the only thing that makes the
+ranking check below actually hold.
+
+**Worked check before you rank.** Account A: two partners closed won in-window = 3 + 3 = **6**.
+Account B: two partners opened deals in-window and both are still open = 2 + 2 = **4**, and the
+open-opportunity modifier adds **nothing**, because both partners were already counted as in-window
+opens. A ranks above B, which is correct — closed won is the strongest signal. If your arithmetic
+puts B first at 8, you double-counted the opens.
+
+**Populations do not score.** Membership in a prospect or other population earns zero. Overlap
+breadth is useful context, so report it next to the score ("38 overlapping partners") — never
+inside it.
+
+**Rank** accounts highest score first. Accounts with zero signals go to the bottom of the list —
+include them but mark as "no signals detected in window."
+
+**Check the ranking before you present it.** An account with no in-window partner activity must
+score 0 and must sort below every account that has any. If a zero-activity account outranks one
+with a live partner deal, the scoring has been misapplied — recompute rather than presenting it.
+Likewise, if event volume alone is floating an account to the top, look at what those events are:
+a stream of one- and two-seat add-ons at a partner's existing customer is not buying motion, and
+should not outrank a genuine new-business deal. Say so when you demote it.
 
 ---
 
 ## Step 4 — Produce the ranked output
 
 Deliver to the configured output destination. Format:
+
+<output_template>
 
 ---
 **ECOSYSTEM PIPELINE SCAN**
@@ -212,7 +277,7 @@ Date: [today] · Lookback: [configured window] · Accounts scanned: [N] · Accou
 **No signals detected:**
 [list account names only]
 
----
+</output_template>
 
 Keep signal summaries tight — one clear interpretation per account, not a list of raw data points. The rep should be able to read the "Why it matters" line and immediately understand why this account is on the list.
 
@@ -230,7 +295,7 @@ For each account in the ranked output, generate a suggested outreach angle based
 - What the entry point is for this account given those signals (e.g. reach out now before the stack solidifies, reference the shared partner relationship as context)
 - What to avoid (e.g. don't mention specific partner deal details — you're not supposed to know the specifics, only that there's activity)
 
-Keep angles to 2–3 sentences. These are talking points, not drafted messages. If the user wants a drafted message, suggest the Beamie skill or equivalent.
+Keep angles to 2–3 sentences. These are talking points, not drafted messages. If the user wants a drafted message, route them to the Ecosystem-Informed Outreach Writer skill (or any outreach-drafting skill they have installed).
 
 Note on every outreach angle: confirm with your partnerships lead before engaging — they'll know if there's already a motion in place and can help frame the approach.
 
@@ -254,3 +319,6 @@ If the user hasn't already set up a scheduled run, offer once at the end: "Want 
 - Strategic partner tag IDs are set by the user in Configuration — do not hardcode them.
 - Accounts not found in Crossbeam are noted, not silently skipped.
 - The output is for internal use only.
+- **Don't imply a partner sees what you see.** Crossbeam surfaces what partners have shared with you under your sharing rules. That is not the same as the partner having confirmed the signal, or being able to see this account from their side. Report ecosystem signals as what the data shows, not as partner-stated fact.
+
+</instructions>

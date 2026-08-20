@@ -1,6 +1,8 @@
 # ELG context — Ecosystem Prospecting (compiled subset)
 
-Compiled from `elg-plays-catalog 06-25-26 V2` and `elg-foundations 06-25-26 V2`, with the tool surface and mechanics corrected against the live Crossbeam MCP. A self-contained subset for this skill only. If the source changes, recompile.
+A self-contained subset of Crossbeam's ELG plays and foundations, covering only what this skill
+runs, with the tool surface and mechanics verified against the live Crossbeam MCP. It is not the
+full catalog.
 
 ---
 
@@ -54,18 +56,18 @@ Composite EQL score = anchor breadth (how many anchor partners hold the account 
 
 **P8. Second-party enrichment** · Trigger: "enrich this prospect list" / generic outreach underperforming. · Cell: prospects × all partner segments. · Tools: `find_overlaps`, `find_partner_contacts`. · Action: replace third-party firmographics with partner context — which partner, customer vs opp, partner AE, segment; flag contact availability and net-new (`in_own_crm:false`) buyers. · Proof: proprietary, un-buyable second-party data.
 
-**P11. PDR/SDR partner sequences** · Trigger: SDR/BDR outbound prep; "who should I prospect and how?" · Cell: prospects × partner customers. · Tools: `find_overlaps`, `find_partner_contacts`. · Action: enroll overlapping contacts in a partner-specific sequence leading with joint value; surface the partner AE; check for sequence conflicts first. · Proof: LeanData grew partner-influenced revenue 3% to 80% in a year.
+**P11. PDR/SDR partner sequences** · Trigger: SDR/BDR outbound prep; "who should I prospect and how?" · Cell: prospects × partner customers. · Tools: `find_overlaps`, `find_partner_contacts`. · Action: enroll overlapping contacts in a partner-specific sequence leading with joint value; surface the partner AE; check for sequence conflicts first. · Proof: partner-specific sequences outperform generic outbound on overlapping accounts (general ELG finding).
 
-**P12. Signal-triggered outbound** · Trigger: "alert me when a prospect heats up"; automated workflow. · Cell: prospects × partner opps/customers. · Tools: a signal/ecosystem-activity tool if exposed. · Action: on a new ecosystem signal (partner closed the account, tech-stack change, new overlap), fire personalized outreach or notify the rep/partner; time the touch to the signal. If no signal tool, degrade to on-demand re-scan. · Proof: Census — "an exclusive lens you can't scrape or buy."
+**P12. Signal-triggered outbound** · Trigger: "alert me when a prospect heats up"; automated workflow. · Cell: prospects × partner opps/customers. · Tools: a signal/ecosystem-activity tool if exposed. · Action: on a new ecosystem signal (partner closed the account, tech-stack change, new overlap), fire personalized outreach or notify the rep/partner; time the touch to the signal. If no signal tool, degrade to on-demand re-scan. · Proof: second-party partner data is a lens you cannot scrape or buy.
 
 ---
 
 ## Proof library (persuade only; always attribute; never invent or reattribute)
 
 - EQLs convert higher than cold leads; lift is back-testable on your own closed data.
-- Okta Ventures: 60 EQLs in 2 weeks across a portfolio; DataGrail account mapping 2-3 months to 10 minutes.
-- LeanData: partner-influenced revenue 3% to 80% in a year.
-- RollWorks: up to 60% higher ad engagement using overlap data.
+Named customer results are deliberately not stored here. To cite a specific company's
+numbers, find a current published case study first and attribute it to that source — never
+recall one from memory, and never attach a metric to a company you have not just verified.
 
 ---
 

@@ -7,10 +7,12 @@ description: >
   the partner contact and the right play (intro, intel, a backchannel reference, a voucher for urgency, a joint-deal
   coordination, or a marketplace co-sell), and drafts the ask with something to offer back. Read-only and draft-only:
   it hands off to your CRM, chat, or co-sell workspace and never sends. Use whenever a rep wants help on a deal or
-  account, including asks like "who can help me win Verizon", "I need a partner intro", "no partner attached", "deals
-  stuck in stage 3", "how do I break into Acme", or "create urgency without discounting". The user does not need to
+  account, including asks like "who can help me win [Account]", "I need a partner intro", "no partner attached", "deals
+  stuck in stage 3", "how do I break into [Account]", or "create urgency without discounting". The user does not need to
   mention partners. Always use this skill to win, unblock, or break into accounts with a partner.
 ---
+
+<readme>
 
 # Co-Sell Copilot (powered by Crossbeam)
 
@@ -18,7 +20,7 @@ Win, unblock, or break into an account with a partner: find who can help, work o
 
 ## What it does
 
-1. Takes whatever you give it — a single account ("who can help me win Verizon", "break into Acme"), a pipeline filter ("deals stuck in stage 3"), or a list — and resolves it against your CRM, or against the connected partner-ecosystem data if you have no CRM
+1. Takes whatever you give it — a single account ("who can help me win [Account]", "break into [Account]"), a pipeline filter ("deals stuck in stage 3"), or a list — and resolves it against your CRM, or against the connected partner-ecosystem data if you have no CRM
 2. Consults your other GTM context if you have it installed — sales playbook, ICP, voice skill — so the play and the wording match how your team sells
 3. Finds which partner is best positioned on each account and qualifies how strong that position really is
 4. Works out the specific play: intro to a stakeholder you are missing, intel on how the account buys, a backchannel reference, a voucher for urgency, coordinating a joint deal, or a marketplace co-sell — and flags when no partner adds anything
@@ -33,7 +35,7 @@ Read-only and draft-only. Nothing is sent; you review every draft and the actual
 - **Crossbeam connector** — the source of partner position, contacts, and activity. Connect from the Claude connector directory or at crossbeam.com. Authenticate to the right org before running. The skill will not run without it.
 
 **For the accounts or deals — any one of these works**
-- A specific account or deal named in your request ("who can help me win Verizon", "help me on the Acme deal")
+- A specific account or deal named in your request ("who can help me win [Account]", "help me on the [Account] deal")
 - A pipeline filter ("deals stuck in stage 3", "open enterprise deals closing this quarter")
 - A pasted list, a CRM report, or a warehouse query
 
@@ -78,10 +80,10 @@ Where give-and-get balance per partner lives, if anywhere. Leave blank if not tr
 
 ## How to run it
 
-- **Single account, plain language:** "Who can help me win Verizon?" / "How do I break into Acme?"
+- **Single account, plain language:** "Who can help me win [Account]?" / "How do I break into [Account]?"
 - **Stuck pipeline:** "I have 5 deals stuck in stage 3, can you help me unlock them?"
 - **No partner attached:** "This opp hit solution review with no partner — what now?"
-- **Urgency:** "Create urgency on the Globex deal without discounting"
+- **Urgency:** "Create urgency on the [Account] deal without discounting"
 - **Pasted list:** "Run crossbeam-co-sell-copilot on these deals: [paste]"
 - **Focus partners:** "Co-sell-copilot, prioritize partners tagged Tier 1"
 
@@ -100,7 +102,13 @@ Works well as a weekly pass over open pipeline, or fed an at-risk list from your
 
 All partner data comes from what your partners have shared with you in Crossbeam under your sharing rules. The skill only surfaces what is already visible to you, and never guesses at data a partner has not shared.
 
----
+</readme>
+
+<instructions>
+
+> **Structural tags.** `<readme>`, `<instructions>`, and `<output_template>` delimit sections of
+> this file for the agent reading it. They are not content: never echo a tag in your output, and
+> where an `<output_template>` is given, reproduce what it contains without the surrounding tags.
 
 ## Technical Reference
 
@@ -112,7 +120,7 @@ The flow: resolve the account(s)/deal(s) -> for each, find positioned partners a
 
 ## ELG plays
 
-This skill implements ELG plays P19, P20, P21, P22, P23, P24, P26, and the reciprocal give P25. The play records and the foundations subset this skill needs are embedded in `references/elg-context.md` — read it before executing. It is a compiled subset of `elg-plays-catalog 06-25-26 V2` and `elg-foundations 06-25-26 V2`; if those change at the source, recompile it.
+This skill implements ELG plays P19, P20, P21, P22, P23, P24, P26, and the reciprocal give P25. The play records and the foundations subset this skill needs are embedded in `references/elg-context.md` — read it before executing. It is a self-contained subset of Crossbeam's ELG plays and foundations, not the full catalog.
 
 How the plays map to the play classification in Step 3:
 - **No partner attached** at a mid/late stage: surface candidates and ask the rep what they need to progress — **P19**.
@@ -120,7 +128,7 @@ How the plays map to the play classification in Step 3:
 - **Vouch** (a contact you already have): partner backchannel endorsement — **P23**.
 - **Voucher** (urgency without discounting): the partner extends an initial voucher so they are the hero — **P24**.
 - **Coordinate** (partner is also selling the account): align deal teams on the better-together next step and hand off to the co-sell workspace — **P21** (use a Deal Navigator link tool if the install exposes one).
-- **Marketplace** (deal can transact via AWS/GCP/Azure): identify marketplace overlap and run rep-to-rep co-sell — **P26**.
+- **Marketplace** (deal can transact via a hyperscaler cloud marketplace): identify marketplace overlap and run rep-to-rep co-sell — **P26**.
 - The reciprocal give is the AMM reciprocal cell — reciprocal influence on, or a lead into, one of your customers the partner wants — **P25**.
 
 ## Configuration
@@ -130,7 +138,7 @@ How the plays map to the play classification in Step 3:
 **Buying center (optional):** [fill in — roles that make a complete buying committee for your sale]
 **Strategic partner tags (optional):** [fill in — e.g. Tier 1, Co-Sell. Leave blank for all partners.]
 **Reciprocity source (optional):** [fill in — where give/get balance per partner lives, or blank]
-**Your company / product name:** [fill in — your own product, e.g. Acme Analytics]
+**Your company / product name:** [fill in — your own product, e.g. the name your reps use for it]
 
 ## Defaults
 
@@ -161,7 +169,7 @@ Detect, do not interrogate. Only ask if there is genuinely no way to get the acc
 
 Detect the input shape, resolve to a concrete set, and confirm anything fuzzy before spending tool calls.
 
-- **Shape A — a single named account or deal** ("who can help me win Verizon", "break into Acme", "help me on the Globex deal"). Resolve that one.
+- **Shape A — a single named account or deal** ("who can help me win [Account]", "break into [Account]", "help me on the [Account] deal"). Resolve that one.
 - **Shape B — a pipeline filter** ("deals stuck in stage 3", "open enterprise deals closing this quarter"). Turn it into a concrete list, then confirm.
 - **Shape C — an explicit list** (pasted, a CRM report, a configured view). Use it directly.
 
@@ -253,6 +261,8 @@ The test: would a busy rep read this and assume a human typed it between calls? 
 
 Ask the user to confirm; let them drop any line where the partner, rep, or play looks wrong. Only create drafts after explicit confirmation.
 
+**What the gate blocks, precisely.** Creating a draft in an email connector, or sending anything, is a hard stop: do not do it in the same turn as the confirmation, wait for the answer. Copy-ready text in chat is not a send, so you may show it in the same turn — but the confirmation summary must appear **above** the drafts, so the user reads who each one is addressed to before they copy anything. Never present drafts with the recipient list buried below them or omitted.
+
 **If an email connector with draft creation is available:** create one draft per confirmed account, recipient = partner rep. Adapt to the tool's parameter shape. Drafts only; never send, even if a send tool exists.
 
 **If no email connector is detected:** ask how the user wants the drafts (connect Gmail/Outlook, or copy-ready text). Wait for the answer. For text, deliver one block per account with recipient, subject, and body. For a Coordinate play, include the Deal Navigator link.
@@ -283,3 +293,5 @@ Do not repeat full email bodies — they are in the drafts.
 - Generic and vendor-neutral. No publisher-internal product or skill names. Crossbeam MCP tool names and public case-study companies are fine — they are the shared interface and public proof every installer has.
 - The reciprocity source is read-only. This skill does not write give/get state.
 - Deal amounts, pipeline, and partner data are sensitive — keep them out of any output not going to the user.
+
+</instructions>

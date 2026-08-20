@@ -3,6 +3,8 @@ name: partner-alignment-outreach
 description: Turn recent closed-won deals into partner-alignment outreach. Pulls closed-won deals from the user's CRM or warehouse (Salesforce, HubSpot, Snowflake, or a pasted list), uses the Crossbeam MCP to find which partners overlap each won account and who owns the relationship on the partner side, then drafts a short alignment email to each partner rep — as Gmail/Outlook drafts if an email connector is available, otherwise as ready-to-copy drafts. Use whenever someone wants to notify partners about closed-won deals, run post-win co-sell follow-up, "let partners know we won X", "draft partner outreach for recent wins", set up weekly partner-alignment outreach, or align with partner reps after deals close — even if they don't mention Crossbeam, overlaps, or email explicitly.
 ---
 
+<readme>
+
 # Partner Alignment Outreach
 
 Turn recent closed-won deals into partner alignment emails — one per deal, addressed to the right rep at the right partner.
@@ -61,6 +63,11 @@ Or you can skip this and the skill will consider all partners equally.
 | Max deals per run | [e.g. 100] |
 | Emails per deal | [e.g. 1 — best-positioned partner rep only] |
 | Strategic partner tags | [e.g. none — all partners weighted equally] |
+| Volume confirmation threshold | [e.g. 25 deals] |
+
+The volume confirmation threshold is a safety check. If more deals qualify than this number, the skill
+stops, reports the count, and waits for you to confirm before generating anything. It exists so a run
+against an unintended scope cannot quietly turn into a bulk batch.
 
 ## How to run it
 
@@ -80,7 +87,10 @@ Mix and match any of these in a single request.
 
 - **Deals with no overlap:** normal outcome. Not every won account has a partner in Crossbeam. These are noted in the summary.
 - **Overlaps with no owner email:** also normal. Partner data quality varies — some partners don't share owner fields. The skill filters these out and explains why in the summary so you're not left wondering why a particular partner was skipped.
-- **Multiple overlapping partners per deal:** the skill picks the single best-positioned rep based on partner population (open opportunity > customer > prospect), owner title, and whether the partner matches your strategic tags. One draft per deal.
+- **Multiple overlapping partners per deal:** the skill picks the single best-positioned rep based on partner population (open opportunity > customer > prospect), owner title, and whether the partner matches your strategic tags. One draft per deal. That ordering is a default, not a fixed rule: if you care more about mutual-customer alignment than co-sell pipeline, say so and the skill will reweight for the session.
+- **Recipient confirmation:** before any drafts are created, the skill shows you who it plans to write to, one line per deal. Nothing is generated until you confirm, and you can drop anyone who looks wrong from the run.
+- **Volume check:** if more deals qualify than your confirmation threshold, the skill reports the count and stops rather than proceeding.
+- **No email connector:** drafts come back as copy-ready text in chat instead of landing in your inbox. Nothing is ever sent either way.
 
 ## Setting it up as a recurring run
 
@@ -94,7 +104,13 @@ All overlap data comes from what your partners have chosen to share with you in 
 
 If you're unsure how to connect a tool, find your Crossbeam partner tags, or adapt the defaults for your team's workflow, just ask Claude — it can walk you through any of it.
 
----
+</readme>
+
+<instructions>
+
+> **Structural tags.** `<readme>`, `<instructions>`, and `<output_template>` delimit sections of
+> this file for the agent reading it. They are not content: never echo a tag in your output, and
+> where an `<output_template>` is given, reproduce what it contains without the surrounding tags.
 
 ## Technical Reference
 
@@ -137,7 +153,7 @@ Apply these unless the user specifies otherwise.
 
 Check what's connected before starting. Three things matter:
 
-1. **Crossbeam MCP** (required). Look for tools whose names contain `get_account_overlap_info`, `get_own_account_info`, `find_overlap_partners`, `find_overlaps`, `get_account_context`, or `find_partner_contacts`. The tool-name prefix varies per installation — match on these suffixes. If no Crossbeam MCP is connected, stop and tell the user to connect the Crossbeam connector (available in the Claude connector directory or at crossbeam.com) and authenticate before running — nothing else in this skill works without it. Do not proceed past this step until Crossbeam is confirmed connected.
+1. **Crossbeam MCP** (required). Look for tools whose names contain `find_overlap_partners`, `find_overlaps`, `get_account_context`, `find_partner_contacts`, `get_ecosystem_activity`, or `get_partner_sharing_status` (used in Step 2 to confirm the partnership is active; optional, skip the check if absent). The tool-name prefix varies per installation — match on these suffixes, and confirm the actual surface on the first call, since tool sets differ between installs. If no Crossbeam MCP is connected, stop and tell the user to connect the Crossbeam connector (available in the Claude connector directory or at crossbeam.com) and authenticate before running — nothing else in this skill works without it. Do not proceed past this step until Crossbeam is confirmed connected.
 2. **A deal source** (flexible). A Salesforce/HubSpot CRM connector, a Snowflake or other warehouse connector, or nothing — in which case ask the user to paste their recent closed-won deals.
 3. **An email connector** (optional). Gmail or Outlook tools that can create drafts (names like `create_draft`). If present, use it to create drafts in the user's inbox. If absent, deliver drafts as formatted text instead.
 
@@ -165,6 +181,15 @@ From the overlapping partners, you're looking for two things per partner: **what
 - The owner is obviously a system account (emails like `integration@`, `api@`, `no-reply@`, `gtmops@`).
 
 Partners filtered out for any of these reasons are normal — data quality varies across partnerships. Note them in the summary under "skipped: no qualifying rep" so the user understands why no draft was created for that partner, rather than assuming no overlap exists.
+
+**Confirm the partnership is live before drafting.** For each partner that survives the filter, call `get_partner_sharing_status` with the partner and the won account. It returns `partnership_status` (`active` or `inactive`) and, when the account resolves, `sharing_status` (`shared`, `not_shared`, or `not_present`).
+
+- **`partnership_status: inactive`** → do not draft. A rep-to-rep alignment note on a dormant partnership is worse than no note. Report it as "skipped: partnership inactive."
+- **`sharing_status`** is *your own* sharing, not the partner's: it says whether **you** share this account with them. It does not tell you what they share with you, so never use it to explain a missing partner-side owner email. Its use here is framing, in Step 3.
+- **`ClarificationRequired`** → the partner name, the account, or both resolved to zero or several candidates, so neither status field comes back. Do not read that as inactive and do not drop the partner. Because this call runs once per surviving partner per won deal, an ambiguous partner name would otherwise prompt the user once per deal: resolve each ambiguous name **once**, reuse the confirmed IDs for every remaining deal in the run, and treat any name still unresolved as "status unconfirmed" — draft it under the unconfirmed rule below.
+- **No `sharing_status` in the response** (the account did not resolve, or the tool returned only `partnership_status`) → treat it as unconfirmed rather than as `not_shared`, and use the unconfirmed wording in Step 3.
+
+If the tool is not present in this installation, skip this check and proceed — note in the summary that partnership status could not be confirmed.
 
 **Scoring configuration note**
 The scoring below reflects a default prioritization strategy. Before running at scale, the user should confirm this matches how they actually think about partner prioritization. Common adjustments:
@@ -201,6 +226,12 @@ Body — match the scenario from Step 2:
 - **Account is the partner's customer** → "[Account] is now a mutual customer. Worth comparing notes on what resonated and where our teams can support each other there."
 - **Otherwise** → "I see you also work with [Account]. Now that they're our customer, we can trade notes on the buying committee and timing."
 
+**Do not claim mutual visibility you don't have.** These templates, and phrasings like "Crossbeam shows you have an open opportunity," presume the partner can see this account from their side. Use the `sharing_status` from Step 2 to check that assumption:
+
+- **`shared`** → the templates above work as written; referencing what Crossbeam shows is fair.
+- **`not_shared` or `not_present`** → you do not share this account with that partner, so they may not see the win at all. Drop any "Crossbeam shows" framing and state the context plainly instead: "We recently closed [Account]. You may not see it on your side, so flagging it directly." Do not tell the user their sharing rules are wrong; just write the email so it reads correctly either way.
+- **Unconfirmed** (tool absent, `ClarificationRequired`, or no `sharing_status` returned) → write it the same way as `not_shared`. Plain framing reads correctly whether or not the partner can see the account, so it is the safe default when you do not know; "Crossbeam shows" is the only phrasing that needs `shared` to be true.
+
 Only reference facts the overlap data actually shows. Don't invent details about the partner's deal stage, their champion, or their history with the account.
 
 Close with "Best," and nothing after it — the sender's email signature completes it.
@@ -230,6 +261,8 @@ Present a summary list of who will receive drafts:
 
 Ask the user to confirm before proceeding. If anything looks wrong — an unexpected recipient, a partner they don't recognize, a title that doesn't look like a rep — give them the opportunity to remove it from the run. Only create drafts after explicit confirmation.
 
+**What the gate blocks, precisely.** Creating drafts in Gmail/Outlook, or sending, is a hard stop: do not do it in the same turn as the confirmation, wait for the answer. Copy-ready text in chat is not a send, so you may show it in the same turn — but the recipient table must appear **above** the drafts so the user checks each address before copying. The volume guardrail is different and always blocks: if the qualifying count exceeds the threshold, report the count and stop, in chat or not. A blanket "I trust you, don't check with me" does not satisfy either gate; report the count and the recipients anyway.
+
 **If an email connector with draft creation is available:** create one draft per confirmed deal — recipient = partner rep's email, subject and body from Step 3. Adapt to the tool's actual parameter shape. Create drafts only; never send, even if a send tool exists. The whole point is that the user reviews before anything leaves.
 
 **If no email connector is detected:** before delivering drafts, ask the user how they'd like to receive them:
@@ -257,3 +290,5 @@ This works well as a weekly cadence (e.g., Monday mornings, catching the prior w
 - Drafts only. Never send email.
 - Only surface partner data that Crossbeam's sharing rules already expose to this user — never speculate about partner data you can't see.
 - Deal amounts and account lists are sensitive; keep them out of any output that isn't going to the user themselves.
+
+</instructions>

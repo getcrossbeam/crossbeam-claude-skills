@@ -3,6 +3,8 @@ name: ecosystem-informed-account-brief
 description: Produce a structured account brief enriched with Crossbeam's ecosystem intelligence and signals — partner overlap, ecosystem relationships, and recent partner activity signals. Uses the sources the user has configured plus Crossbeam MCP and recent news. Use whenever someone asks to be "briefed on" an account, wants an "overview" or "context" on an account, or asks "what do we know about X". For one-off lookups or qualitative questions across communications, use a direct query to the relevant source instead.
 ---
 
+<readme>
+
 # README — Ecosystem-Informed Account Brief
 
 Get a structured picture of any account — what's happening in your conversations, where your partners are moving on this account, and what to do next.
@@ -29,7 +31,7 @@ Decide which sources you want included in every brief and fill them into the Con
 
 > **Fill in before sharing:** `Configured sources: [list your sources here]`
 
-You can still override on a per-run basis ("brief me on Acme, skip [source] this time") but the configured list is the default. If nothing is configured here, the brief still runs on Crossbeam alone and reflects ecosystem intelligence only — it won't pull from any source that isn't listed.
+You can still override on a per-run basis ("brief me on [Account], skip [source] this time") but the configured list is the default. If nothing is configured here, the brief still runs on Crossbeam alone and reflects ecosystem intelligence only — it won't pull from any source that isn't listed.
 
 **Step 3 — Set your Crossbeam partner tags (optional)**
 If you want the brief to focus on specific partners — Tier 1s, active co-sell partners, strategic ISVs — fill in which Crossbeam tags identify them in the Configuration section.
@@ -53,7 +55,8 @@ After your first run, ask Claude to help you refine any sections based on what w
 ## What to expect
 
 - **Ecosystem intelligence called out explicitly** — where Crossbeam data changes the picture (a partner with an open deal, a greenfield signal, a risk from ecosystem movement), the brief calls it out rather than burying it.
-- **Crossbeam-only runs:** the brief works without account or sales intelligence sources configured — you'll still get full ecosystem intelligence. Adding those sources layers in account context that makes the ecosystem signals more actionable.
+- **Crossbeam-only runs:** the brief works without account or sales intelligence sources configured — you'll still get full ecosystem intelligence. Adding those sources layers in account context that makes the ecosystem signals more actionable. A blank Configured sources field is never a reason to halt: the brief runs on Crossbeam alone and says which sources were missing.
+- **Partner contact details:** partner owner contact information exists in Crossbeam but is not surfaced directly in the brief. Where an ecosystem signal suggests a partner play, the brief recommends looping in your partnerships lead, who holds the relationship context and can make the right introduction.
 - **Missing sources:** the brief notes what wasn't configured rather than failing.
 - **No ecosystem relationships found:** normal for some accounts. The brief notes it clearly.
 - **One-off lookups** aren't what this skill is for — ask Claude to query your source directly.
@@ -64,10 +67,20 @@ Just ask Claude — it can walk you through connecting tools, finding your Cross
 
 ## Related
 
-- **Meeting prep** — if you have a specific upcoming meeting with known attendees, use the meeting-prep skill instead.
+- **Meeting prep** — if you have a specific upcoming meeting with known attendees, and you have a meeting-prep skill installed, use that instead.
 - **One-off lookups** — ask Claude to query your source directly for time-windowed or count-bounded requests.
 
----
+## A note on the data
+
+All partner data comes from what your partners have shared with you in Crossbeam under your sharing rules. The skill only surfaces what is already visible to you, and never guesses at data a partner has not shared.
+
+</readme>
+
+<instructions>
+
+> **Structural tags.** `<readme>`, `<instructions>`, and `<output_template>` delimit sections of
+> this file for the agent reading it. They are not content: never echo a tag in your output, and
+> where an `<output_template>` is given, reproduce what it contains without the surrounding tags.
 
 # Skill Instructions
 
@@ -112,29 +125,35 @@ If a configured source isn't connected, tell the user and ask if they'd like to 
 
 Run all three calls. If the account isn't found in Crossbeam, note it and skip to Step 4.
 
+> **Tool names:** the Crossbeam MCP tool-name prefix varies per installation (e.g. `Crossbeam:`, `mcp__Crossbeam__`). Match on the suffixes below rather than the full name, and confirm the actual tool surface on the first call — tool sets differ between installs.
+
 **3a — Resolve the account**
 ```
-Crossbeam:get_own_account_info(account_domain: "example.com")
+get_account_context(account_domain: "example.com")
 ```
-Extract the `record_id`.
+Accepts `account_domain`, `account_name` (fuzzy), or `account_id`. Domain is the most reliable. Extract the account's CRM `record_id` / `account_id` from the match — Step 3c needs it. If several accounts come back, pick by the user's intent and confirm if unclear.
 
 **3b — Get partner overlap**
 ```
-Crossbeam:get_account_overlap_info(account_id: "<record_id>")
+find_overlap_partners(account_id: "<record_id>", limit: 100)
 ```
-If strategic partner tags are configured, also call:
+**Always pass `limit`.** The tool defaults to `limit: 10`, so an account overlapping more partners than that silently returns only the first page, with no error and no truncation flag. Pass `limit: 100` and paginate with `page` until the partner list is complete.
+
+If strategic partner tags are configured, filter in the same call — this tool takes the tag directly, so no second call and no manual intersect is needed:
 ```
-Crossbeam:find_partners(partner_tag_id: "<tag_id>")
+find_overlap_partners(account_id: "<record_id>", partner_tag_name: "<tag>", limit: 100)
 ```
-Then intersect — keep only overlaps where the partner matches a tagged partner. If no tags configured, use all overlapping partners.
+An ambiguous tag returns `ClarificationRequired` with candidates; present them and retry with `partner_tag_id`. If no tags are configured, omit the tag argument to get every partner that shares the account.
+
+**`partner_tag_name` takes a single tag, not a list.** Configuration invites several (e.g. "Tier 1, Co-Sell"), so if more than one is configured you cannot pass them in one call. Make one call per configured tag and union the results by partner, de-duplicating. Passing only the first tag silently drops partners that carry only the others, which shows up as partners missing from the brief rather than as an error.
 
 For each match capture: partner name, population name, and partner owner name if available. Do not surface partner owner contact details (email, phone) in the brief. If a signal suggests a partner motion, note in NEXT STEPS that partner owner contact details are available but recommend coordinating with their partnerships lead before reaching out — they may already have an active relationship or motion with this partner.
 
 **3c — Get ecosystem activity signals**
 ```
-Crossbeam:get_ecosystem_activity(account_domain: "example.com")
+get_ecosystem_activity(record_ids: ["<record_id>"], resource_type: "accounts")
 ```
-If strategic partner tags are configured, filter to those partners by name. If any partner name is ambiguous, resolve the ClarificationRequired before proceeding.
+This tool filters by CRM **record ID**, not by domain — use the `record_id` from Step 3a. Optionally narrow with `partner_names` (fuzzy; ambiguous names return `ClarificationRequired` — resolve before proceeding) or `event_types`, whose valid values are `partner_deal_opened`, `partner_deal_closed_won`, and `partner_greenfield_deal_closed_won`. If strategic partner tags are configured, pass the tagged partner names from Step 3b.
 
 Capture: event type (deal opened / deal closed won / greenfield), partner name, date, contact context if available.
 
@@ -165,6 +184,9 @@ Using all data gathered, produce the brief below. Rules:
 - Risks & Concerns must be affirmatively justified — if no risks, cite the evidence. An empty section without justification is a failed brief.
 
 ---
+
+<output_template>
+
 ## TLDR
 **[Account]** — [Status] — $[ARR/contract value] — Last touch: [X days ago / never]
 
@@ -262,6 +284,8 @@ If none detected: "No negative sentiment or churn signals detected."
 ## INTERNAL CONTEXT
 [2–4 bullets from configured internal messaging source, with dates. Or "not configured — skipped." Or "No dedicated channel found."]
 
+</output_template>
+
 ---
 
 ## Rules
@@ -273,4 +297,7 @@ If none detected: "No negative sentiment or churn signals detected."
 - Strategic partner tag IDs are set by the user in Configuration — do not hardcode them.
 - Risks & Concerns must be affirmatively justified, never empty.
 - The brief is for internal use only.
-- If the user mentions a specific upcoming meeting with known attendees, suggest the meeting-prep skill instead.
+- **Don't imply a partner sees what you see.** Crossbeam surfaces what partners have shared with you under your sharing rules. That is not the same as the partner having confirmed the signal, or being able to see this account from their side. Report ecosystem signals as what the data shows, not as partner-stated fact.
+- If the user mentions a specific upcoming meeting with known attendees, suggest a meeting-prep skill instead, if one is installed.
+
+</instructions>

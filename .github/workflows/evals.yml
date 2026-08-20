@@ -1,0 +1,39 @@
+name: evals
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate manifests and eval suites
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # Schema-checks the plugin manifest, the marketplace entry, and every
+      # SKILL.md frontmatter. --strict fails on warnings the runtime tolerates
+      # (unknown fields, missing metadata) so the listing never pins a repo
+      # that only "mostly" validates.
+      - name: Validate plugin and marketplace manifests
+        run: |
+          npx -y @anthropic-ai/claude-code plugin validate .claude-plugin/plugin.json --strict
+          npx -y @anthropic-ai/claude-code plugin validate .claude-plugin/marketplace.json --strict
+          npx -y @anthropic-ai/claude-code plugin validate skills --strict
+
+      # Checks every skills/*/evals/evals.json: required keys, unique ids and names,
+      # kebab-case names, skill_name matching both the folder and the SKILL.md
+      # frontmatter, and that no prompt leaks its own skill slug to the executor.
+      - name: Validate eval suites
+        run: python3 evals/run.py validate
+
+      - name: Inventory
+        run: python3 evals/run.py list

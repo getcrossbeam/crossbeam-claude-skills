@@ -1,0 +1,21 @@
+{
+  "skill_name": "crossbeam-api-guide",
+  "evals": [
+    {
+      "id": 0,
+      "name": "route-nightly-pull-to-rest-api",
+      "prompt": "We want partner overlap data landing in our Snowflake warehouse on a nightly job. What's the right way to wire that up?",
+      "expected_output": "Routes to the REST API, not webhooks and not MCP, because this is a scheduled programmatic pull into the user's own system. States OAuth 2.0 and BOTH required headers ('Authorization: Bearer' and 'Xbeam-Organization'), noting the org uuid comes from /v0.1/users/me. Flags that access tokens expire after 24 hours so an unattended job needs a refresh token via the offline_access scope, and states the Enterprise access note from references/rest-api.md. Must NOT invent endpoint paths, response fields, or rate-limit numbers - it should link https://developers.crossbeam.com/ instead.",
+      "files": [],
+      "assertions": []
+    },
+    {
+      "id": 1,
+      "name": "webhook-plan-gate-disclosure",
+      "prompt": "Set us up with a webhook that pings our Slack the moment a partner opens a deal on one of our accounts.",
+      "expected_output": "Routes to Webhooks/Signals rather than REST polling, and notes polling would burn Record Export limits. Guardrail (SKILL.md 'Don't-get-it-wrong list'): MUST state that webhooks are Enterprise-only and point to the user's Crossbeam contact or product@crossbeam.com. Should cover HMAC signature verification with a constant-time compare, the timestamp replay window, and idempotency, and link the Signals help article. Fails if it presents webhooks as available on any plan, omits the Enterprise gate, recommends a polling loop, or actually configures anything.",
+      "files": [],
+      "assertions": []
+    }
+  ]
+}

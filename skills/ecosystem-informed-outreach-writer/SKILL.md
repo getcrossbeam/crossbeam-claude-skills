@@ -14,6 +14,8 @@ description: >
   from your closed-won deals, use partner-alignment-outreach instead.
 ---
 
+<readme>
+
 # README: Outbound Email Writer
 
 Write outbound emails that sound like a sharp rep typed them quickly, not like a template. Single email or a full sequence, any motion, no setup required.
@@ -36,7 +38,7 @@ If all you have is a company name and a title, that's enough to start. The draft
 
 ## How to run it
 
-> "Write a cold email to the Head of Partnerships at Acme"
+> "Write a cold email to the Head of Partnerships at [Company]"
 > "Draft a re-engagement email to a customer who's gone quiet"
 > "Write me a 3-email sequence for [person] at [company] about [reason]"
 > "Improve this email: [paste]"
@@ -56,7 +58,13 @@ You'll be asked one thing up front: single email, 3-email sequence, or 7-email s
 
 Just start with the company and the person's title and say what you're trying to do. It will ask for anything else it needs, and it will tell you where it's working from persona alone versus a real signal you provided.
 
----
+</readme>
+
+<instructions>
+
+> **Structural tags.** `<readme>`, `<instructions>`, and `<output_template>` delimit sections of
+> this file for the agent reading it. They are not content: never echo a tag in your output, and
+> where an `<output_template>` is given, reproduce what it contains without the surrounding tags.
 
 # Skill Instructions
 
@@ -332,7 +340,7 @@ When this is a first email to someone with no prior relationship and the user ne
 
 ## Step 5: De-AI pass (HARD GATE, the last stop before delivery)
 
-Re-read every draft before it goes anywhere. This is a hard stop: no email is delivered until it passes all three checks. If a draft fails, rewrite it and run the gate again.
+Re-read every draft before it goes anywhere. This is a hard stop: no email is delivered until it passes all four checks. If a draft fails, rewrite it and run the gate again.
 
 ### 5a. Zero em dashes
 
@@ -349,7 +357,28 @@ Cut or rewrite anything that marks an email as AI-generated:
 - **Generic-bucket framing:** "companies like yours", "teams like yours", "businesses your size", "organizations in your space", "folks like you". It makes the reader feel like a segment instead of a person, and it's the fastest way to sound like mass mail. Replace it with the recipient's actual company name, or name a real, specific peer (e.g. "the way [named company] runs this"). Naming concrete peer companies is good. Lumping the recipient into a vague "like yours" group is not.
 - Surveillance framing: "I noticed", "I saw that", "I can see you" plus a specific behavior. Reference context the user gave you as something you know, not something you watched them do.
 
-### 5c. The human test
+### 5c. Exactly one ask
+
+Count the **asks**, not the question marks. An ask is anything the reader has to answer or decide: a
+meeting request, a question, an offer to send something, a "let me know if". There should be exactly
+one, and it should be the CTA.
+
+Question marks are a useful flag but a bad test, because they miss in both directions. Three stacked
+asks can carry a single question mark ("Want a walkthrough? I'm around whenever, or grab time here.")
+and a perfectly good statement CTA carries none ("Open to 20 minutes next week."). Count what the
+reader has to act on, then check the punctuation second.
+
+The common failure is not two explicit CTAs, it is a soft curiosity question sitting just before the
+real ask: "Curious which way you're leaning so far. Worth 20 minutes next week?" That is two asks.
+The reader now has two things to answer, so the easy yes/no you engineered is no longer easy, and the
+softer question is the one that gets ignored. Keep the CTA and cut the other question, or fold its
+substance into a statement. Appendix A Example 1 shows that fold: the curiosity survives as a
+statement, and the CTA stays the only thing to answer.
+
+One email, one thing to respond to. The single exception is a post-meeting follow-up, which may carry
+at most two concrete next steps.
+
+### 5d. The human test
 
 Would a busy person read this and assume a human typed it between meetings? If not, rewrite until yes.
 
@@ -394,9 +423,9 @@ Two real, high-performing outbound patterns, genericized. Use them as structural
 
 ### Example 1: You use their product, peer curiosity (warm cold)
 
-**Motion:** cold or near-cold, opened from a real relationship (you already use the recipient's product). **Why it works:** leads with credibility and genuine curiosity, names relevant peers, and asks one real question instead of pitching.
+**Motion:** cold or near-cold, opened from a real relationship (you already use the recipient's product). **Why it works:** leads with credibility and genuine curiosity, names relevant peers, and lands one real ask instead of pitching.
 
-**Pattern:** disclosure (you use their product) → an opportunity you see from a different angle → the category-level problem → two named peers doing it well → one genuine question → light CTA.
+**Pattern:** disclosure (you use their product) → an opportunity you see from a different angle → the category-level problem → two named peers doing it well → genuine curiosity stated, not asked → one CTA.
 
 ```
 Subject: [specific, 8 words or fewer]
@@ -411,7 +440,7 @@ Looking at it through a [different] lens, though, I noticed an opportunity for y
 
 It's why companies like [Peer 1] and [Peer 2] use [Your company]. They [the specific thing they do differently].
 
-Since we already use [their product], I'm curious, how is your team handling [the specific thing] today?
+Since we already use [their product], I'd be curious how your team is handling [the specific thing] today.
 
 Worth a 20 minute chat next week?
 ```
@@ -420,7 +449,7 @@ Worth a 20 minute chat next week?
 
 **Motion:** warm outreach to a new or active user. **Why it works:** generous, low-pressure, references real activity, and makes the next step effortless.
 
-**Pattern:** quick self-intro → offer yourself as a resource → reference the specific activity you saw → offer a walkthrough or to answer questions → easy calendar option → warm close.
+**Pattern:** quick self-intro → offer yourself as a resource → reference the specific activity you saw → one easy calendar ask that folds in the walkthrough offer → warm close.
 
 ```
 Subject: [specific, 8 words or fewer]
@@ -431,11 +460,11 @@ Hi [First name],
 1. A proper intro, good to meet you.
 2. I want to be a resource for you and the [Company] team.
 
-I saw you've spent some time in [product or area] lately. Want me to answer any questions, or would a quick walkthrough be useful?
-
-I'm around whenever, just reach out. Or grab time here: [calendar link].
+I saw you've spent some time in [product or area] lately. If a walkthrough or any open questions would help, grab time here: [calendar link].
 
 Looking forward to working together.
 ```
 
-Both examples obey the rules in Steps 4 and 5: no em dashes, one CTA, a specific subject, and no machine-written filler. Adapt the placeholders to the real situation, and never invent the peer names, the use case, or the activity, use only what the user gave you or what you verified in Step 1f.
+Both examples obey the rules in Steps 4 and 5: no em dashes, exactly one ask, a specific subject, and no machine-written filler. Example 1 carries its single ask as a question; Example 2 carries its single ask as a statement, which 5c allows. Adapt the placeholders to the real situation, and never invent the peer names, the use case, or the activity, use only what the user gave you or what you verified in Step 1f.
+
+</instructions>
