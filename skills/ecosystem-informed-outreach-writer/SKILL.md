@@ -359,18 +359,24 @@ Cut or rewrite anything that marks an email as AI-generated:
 
 ### 5c. Exactly one ask
 
-Count the question marks in the body of each email. There should be one, and it should be the CTA.
+Count the **asks**, not the question marks. An ask is anything the reader has to answer or decide: a
+meeting request, a question, an offer to send something, a "let me know if". There should be exactly
+one, and it should be the CTA.
+
+Question marks are a useful flag but a bad test, because they miss in both directions. Three stacked
+asks can carry a single question mark ("Want a walkthrough? I'm around whenever, or grab time here.")
+and a perfectly good statement CTA carries none ("Open to 20 minutes next week."). Count what the
+reader has to act on, then check the punctuation second.
 
 The common failure is not two explicit CTAs, it is a soft curiosity question sitting just before the
 real ask: "Curious which way you're leaning so far. Worth 20 minutes next week?" That is two asks.
 The reader now has two things to answer, so the easy yes/no you engineered is no longer easy, and the
 softer question is the one that gets ignored. Keep the CTA and cut the other question, or fold its
-substance into a statement.
+substance into a statement. Appendix A Example 1 shows that fold: the curiosity survives as a
+statement, and the CTA stays the only thing to answer.
 
-Also check that the ask is not duplicated in another form: an offer to send something, a "let me know
-if", and a meeting request are three asks even when only one carries a question mark. One email, one
-thing to respond to. The single exception is a post-meeting follow-up, which may carry at most two
-concrete next steps.
+One email, one thing to respond to. The single exception is a post-meeting follow-up, which may carry
+at most two concrete next steps.
 
 ### 5d. The human test
 
@@ -417,9 +423,9 @@ Two real, high-performing outbound patterns, genericized. Use them as structural
 
 ### Example 1: You use their product, peer curiosity (warm cold)
 
-**Motion:** cold or near-cold, opened from a real relationship (you already use the recipient's product). **Why it works:** leads with credibility and genuine curiosity, names relevant peers, and asks one real question instead of pitching.
+**Motion:** cold or near-cold, opened from a real relationship (you already use the recipient's product). **Why it works:** leads with credibility and genuine curiosity, names relevant peers, and lands one real ask instead of pitching.
 
-**Pattern:** disclosure (you use their product) → an opportunity you see from a different angle → the category-level problem → two named peers doing it well → one genuine question → light CTA.
+**Pattern:** disclosure (you use their product) → an opportunity you see from a different angle → the category-level problem → two named peers doing it well → genuine curiosity stated, not asked → one CTA.
 
 ```
 Subject: [specific, 8 words or fewer]
@@ -434,7 +440,7 @@ Looking at it through a [different] lens, though, I noticed an opportunity for y
 
 It's why companies like [Peer 1] and [Peer 2] use [Your company]. They [the specific thing they do differently].
 
-Since we already use [their product], I'm curious, how is your team handling [the specific thing] today?
+Since we already use [their product], I'd be curious how your team is handling [the specific thing] today.
 
 Worth a 20 minute chat next week?
 ```
@@ -443,7 +449,7 @@ Worth a 20 minute chat next week?
 
 **Motion:** warm outreach to a new or active user. **Why it works:** generous, low-pressure, references real activity, and makes the next step effortless.
 
-**Pattern:** quick self-intro → offer yourself as a resource → reference the specific activity you saw → offer a walkthrough or to answer questions → easy calendar option → warm close.
+**Pattern:** quick self-intro → offer yourself as a resource → reference the specific activity you saw → one easy calendar ask that folds in the walkthrough offer → warm close.
 
 ```
 Subject: [specific, 8 words or fewer]
@@ -454,13 +460,11 @@ Hi [First name],
 1. A proper intro, good to meet you.
 2. I want to be a resource for you and the [Company] team.
 
-I saw you've spent some time in [product or area] lately. Want me to answer any questions, or would a quick walkthrough be useful?
-
-I'm around whenever, just reach out. Or grab time here: [calendar link].
+I saw you've spent some time in [product or area] lately. If a walkthrough or any open questions would help, grab time here: [calendar link].
 
 Looking forward to working together.
 ```
 
-Both examples obey the rules in Steps 4 and 5: no em dashes, one CTA, a specific subject, and no machine-written filler. Adapt the placeholders to the real situation, and never invent the peer names, the use case, or the activity, use only what the user gave you or what you verified in Step 1f.
+Both examples obey the rules in Steps 4 and 5: no em dashes, exactly one ask, a specific subject, and no machine-written filler. Example 1 carries its single ask as a question; Example 2 carries its single ask as a statement, which 5c allows. Adapt the placeholders to the real situation, and never invent the peer names, the use case, or the activity, use only what the user gave you or what you verified in Step 1f.
 
 </instructions>
