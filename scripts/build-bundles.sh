@@ -8,7 +8,14 @@
 #   ./scripts/build-bundles.sh
 #
 # Requires `zip`. Each archive contains the skill folder itself (SKILL.md plus any
-# references/ and evals/ subfolders), so unzipping yields a directory ready to upload.
+# references/ subfolder), so unzipping yields a directory ready to upload.
+#
+# evals/ is deliberately excluded. Each evals.json carries `expected_output`, which is the
+# grading rubric, and evals/README.md is explicit that the executing agent must never see it.
+# Shipping the rubric inside the folder a user uploads to Claude would put it in front of the
+# very agent it is meant to measure. The runner that makes a suite usable (evals/run.py) lives
+# at the repo root and is not in the bundle either, so the file would be dead weight regardless.
+# Anyone who wants to run the suites should clone the repo.
 
 set -euo pipefail
 
@@ -46,7 +53,7 @@ for skill_path in "$skills_dir"/*/; do
   fi
 
   # Zip from skills/ so the archive contains the folder, not its bare contents.
-  ( cd "$skills_dir" && zip -qr "$out_dir/$skill.zip" "$skill" -x '*.DS_Store' )
+  ( cd "$skills_dir" && zip -qr "$out_dir/$skill.zip" "$skill" -x '*.DS_Store' -x "$skill/evals/*" )
 
   size="$(du -h "$out_dir/$skill.zip" | cut -f1 | tr -d ' ')"
   printf '  built %-46s %s\n' "$skill.zip" "$size"
