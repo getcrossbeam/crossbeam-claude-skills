@@ -74,9 +74,15 @@ Two things worth knowing before you write against these:
 - **`find_overlaps` vs `find_overlap_partners`** is the most common mix-up. The
   deciding signal is the *shape of the answer* — a list of accounts vs a list of
   partners — not which company the user named.
-- **Populations are filters, not their own tools.** Pass `our_populations` /
-  `our_segments` and per-partner `populations` / `segments` to `find_overlaps`
-  rather than looking for a standalone populations endpoint.
+- **Populations are both filter inputs and returned fields, but never their own
+  tool.** There is no standalone populations endpoint. To narrow a report, pass
+  `our_populations` / `our_segments` and per-partner `populations` / `segments`
+  to `find_overlaps`. To read populations back, note that results carry them:
+  `find_overlap_partners` returns `partner_record.populations[]`, and
+  `get_ecosystem_activity` returns `populations[]` (your side) alongside
+  `partner_populations[]` (the partner's). Each entry has `id`, `name`, and
+  `segment`, so a skill can rely on the population label, not just the segment
+  type.
 
 > The MCP tool surface is evolving during Limited Availability, and tool sets can
 > differ between installations. Confirm the tools actually exposed on your
