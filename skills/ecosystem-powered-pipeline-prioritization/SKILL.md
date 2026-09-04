@@ -172,29 +172,29 @@ For each account on the list, run the following. If the account isn't found in C
 ```
 get_account_context(account_domain: "example.com")
 ```
-Accepts `account_domain`, `account_name` (fuzzy), or `account_id`. Domain is the most reliable. Extract the account's CRM `record_id` / `account_id` — Step 2c needs it.
+Accepts `account_domain`, `account_name` (fuzzy), or `account_id`. Domain is the most reliable. Extract the account's CRM `record_id` / `account_id` — Step 2c needs it. The response also carries your own CRM fields as `own_fields`, useful if the account source doesn't already give you the account's own segment or stage.
 
 **2b — Get partner overlap**
 ```
-find_overlap_partners(account_id: "<record_id>", limit: 100)
+find_overlapping_partners(account_id: "<record_id>", limit: 100)
 ```
 **Always pass `limit`.** The tool defaults to `limit: 10`, so an account overlapping more partners than that silently returns only the first page, with no error and no truncation flag. Pass `limit: 100` and paginate with `page` until the partner list is complete.
 
 If strategic partner tags are configured, filter in the same call — this tool takes the tag directly, so no second call and no manual intersect is needed:
 ```
-find_overlap_partners(account_id: "<record_id>", partner_tag_name: "<tag>", limit: 100)
+find_overlapping_partners(account_id: "<record_id>", partner_tag_name: "<tag>", limit: 100)
 ```
 An ambiguous tag returns `ClarificationRequired` with candidates; resolve it once at the start of the scan and reuse the confirmed `partner_tag_id` for every remaining account rather than re-prompting per account.
 
 **`partner_tag_name` takes a single tag, not a list.** Configuration invites several (e.g. "Tier 1, Co-Sell"). If more than one is configured, make one call per tag and union the results by partner before scoring. Passing only the first tag silently drops partners carrying only the others, and because those partners' signals then never enter scoring, the account can be reported as "no signals detected in window" when it actually has some. If no tags are configured, omit the tag argument to get every partner that shares the account.
 
-Capture: partner name, population name (interpret intent over exact string — "Pipeline", "Active Opportunities" = open opportunity; "Clients", "Active Customers" = customer).
+Capture: partner name, population name (interpret intent over exact string — "Pipeline", "Active Opportunities" = open opportunity; "Clients", "Active Customers" = customer). If a specific shared field (account tier, renewal date) would sharpen the "Why it matters" line in Step 4, pull it with `get_partner_overlaps_shared_context(partner_name: "<partner>", record_type: "account", record_id: "<record_id>")` for the top-ranked accounts rather than for every account scanned.
 
 **2c — Get ecosystem activity signals**
 ```
-get_ecosystem_activity(record_ids: ["<record_id>"], resource_type: "accounts")
+get_ecosystem_activity(record_ids: ["<record_id>"], record_type: "account")
 ```
-This tool filters by CRM **record ID**, not by domain — use the `record_id` from Step 2a. Optionally narrow with `partner_names` / `partner_ids`, or with `event_types`, whose valid values are `partner_deal_opened`, `partner_deal_closed_won`, and `partner_greenfield_deal_closed_won`. If strategic partner tags are configured, pass the tagged partner names from Step 2b.
+Note the parameter is `record_type` (not `resource_type`), and its accepted values are `account` and `lead` (singular, not `accounts`/`leads`) to match what the response returns. This tool filters by CRM **record ID**, not by domain — use the `record_id` from Step 2a. Optionally narrow with `partner_names` / `partner_ids`, or with `event_types`, whose valid values are `partner_deal_opened`, `partner_deal_closed_won`, and `partner_greenfield_deal_closed_won`. If strategic partner tags are configured, pass the tagged partner names from Step 2b.
 
 **Resolve `partner_names` before the scan, then pass `partner_ids`.** If any name resolves to zero or multiple partners the tool returns `ClarificationRequired` and **no events at all** — which this step would otherwise read as "no activity" and score 0, producing the exact false negative Step 2b warns about. Resolve the tagged partner names once at the start of the scan, then pass the confirmed `partner_ids` for every account, so an ambiguous name cannot re-prompt once per account across a long run.
 
