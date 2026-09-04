@@ -135,11 +135,13 @@ Implements ELG plays P7, P8, P11, and P12. Play records and the foundations subs
 ## Verified tool surface
 
 Confirm exact names/params against the connected server on the first call. Tools observed in production:
-- `find_overlaps` — account lists by population intersection. `our_segments` filters YOUR side; the `partners` arg takes either an array of partner specs (each with `id`/`name` + `segments`) or an EcosystemFilter (`tag_name`/`tag_id`, `segments`, `partner_scores`). Returns each account's `partner_names`/`partner_segments` (the PARTNER's segment) and a `total_count`. **The row does not say which of YOUR segments the account is in** — see Step 3. Large reports may return `RetryLater`; fuzzy names return `ClarificationRequired`, and a named partner that doesn't exist returns `is_no_match: true`.
-- `find_overlap_partners` — partners that share a given account; supports `partner_tag_name`. Use to confirm which partners carry a tag.
-- `find_partner_contacts` — partner-shared contacts at an account, with priority-role `insights` and an `in_own_crm` flag. One call per account.
+- `find_overlapping_accounts_and_leads` (was `find_overlaps`) — account lists by population intersection. `our_segments` filters YOUR side; the `partners` arg takes either an array of partner specs (each with `id`/`name` + `segments`) or an EcosystemFilter (`tag_name`/`tag_id`, `segments`, `partner_scores`). Returns each account's `partner_names`/`partner_segments` (the PARTNER's segment), the referential `record_id` to your own CRM for each overlap, and a `total_count`. **The row does not say which of YOUR segments the account is in** — see Step 3. Large reports may return `RetryLater`; fuzzy names return `ClarificationRequired`, and a named partner that doesn't exist returns `is_no_match: true`.
+- `find_overlapping_partners` (was `find_overlap_partners`) — partners that share a given account; supports `partner_tag_name`. Use to confirm which partners carry a tag.
+- `find_partner_shared_contacts` (was `find_partner_contacts`) — partner-shared contacts at an account, with priority-role `insights` and an `in_own_crm` flag. One call per account.
 - `find_partner_recommendations` — EI-recommended partners + `ei_signals` for a named deal/account.
-- `find_new_accounts` — pipeline-generation accounts: companies your partners sell to that you could go after. `pipeline_type` classifies each row — `net_new` (absent from your CRM entirely), `prospect` (in one of your prospect populations, overlaps a partner's customers, no open opp), `not_in_my_populations` (in your CRM but in no population, usually a population-rule gap). Supports `partner_names`/`partner_ids`, `partner_tag_name`/`partner_tag_id`, and `sort_by`. **The tag argument WIDENS rather than narrows:** combined with `partner_names`/`partner_ids` it returns accounts for partners matching *either* filter, not both. So a tag plus a named pool pulls in partners outside that pool. To restrict to an intersection, pass one filter and discard non-members yourself. **This is the only tool that reaches true net-new whitespace — `find_overlaps` cannot.**
+- `find_new_accounts` — pipeline-generation accounts: companies your partners sell to that you could go after. `pipeline_type` classifies each row — `net_new` (absent from your CRM entirely), `prospect` (in one of your prospect populations, overlaps a partner's customers, no open opp), `not_in_my_populations` (in your CRM but in no population, usually a population-rule gap). Supports `partner_names`/`partner_ids`, `partner_tag_name`/`partner_tag_id`, and `sort_by`. **The tag argument WIDENS rather than narrows:** combined with `partner_names`/`partner_ids` it returns accounts for partners matching *either* filter, not both. So a tag plus a named pool pulls in partners outside that pool. To restrict to an intersection, pass one filter and discard non-members yourself. **This is the only tool that reaches true net-new whitespace — `find_overlapping_accounts_and_leads` cannot.**
+- `get_partner_overlaps_shared_context` — one partner's shared custom-field context on a single account or lead (owner, industry, employee count, tier, renewal date, etc). Use for the top-N enrichment in Step 5 when a specific shared field, not just contacts, sharpens the angle. One partner, one record per call; a `truncated` response means more exists.
+- `get_account_context` — your own CRM fields for an account, now returned as `own_fields`, alongside the Crossbeam match. Useful in Step 1/Step 3 when a CRM/warehouse connector isn't available to confirm your own-side segment.
 - `search_crossbeam_knowledge` — ELG/product/blog content.
 
 No ecosystem-activity / signal tool is guaranteed present — Step 8 degrades to an on-demand re-scan.
@@ -155,7 +157,7 @@ Confirm the Crossbeam MCP is connected and authenticated; if not, stop and say s
 Do **not** default to "all partners, sort by overlap breadth" — that floats megacorps with many partners to the top and buries fit. Instead, pick the partner pools whose customers are the best leads for what's being prospected:
 
 1. **Read the prompt for the product/goal.** "Leads for our [X] launch" → the partners that relate to X.
-2. **Prefer a partner tag.** If a tag groups the relevant partners (e.g. an integration-surface tag, a tier, a theme), anchor on it: pass `partners: { tag_name: "<tag>", segments: ["customers","open_opportunities"] }` to `find_overlaps`. Confirm a fuzzy tag with the user (or enumerate members via `find_overlap_partners(partner_tag_name=...)`) so the report is transparent about *which* partners it used and *why*.
+2. **Prefer a partner tag.** If a tag groups the relevant partners (e.g. an integration-surface tag, a tier, a theme), anchor on it: pass `partners: { tag_name: "<tag>", segments: ["customers","open_opportunities"] }` to `find_overlapping_accounts_and_leads`. Confirm a fuzzy tag with the user (or enumerate members via `find_overlapping_partners(partner_tag_name=...)`) so the report is transparent about *which* partners it used and *why*.
 3. **Named partners.** If the user names partners, resolve them. If a named partner returns `is_no_match` (not in the ecosystem), **say so plainly** — do not silently drop it. ("X and Y aren't partners in your Crossbeam ecosystem; anchoring on the ones that are.")
 4. **Fallback.** No tag or names → anchor on strategic-tagged or high-`partner_score` partners, and/or weight by ICP fit in Step 4. State the basis.
 
@@ -164,7 +166,7 @@ Resolve the prospect population in parallel: CRM/warehouse when connected, else 
 ## Step 2 — Pull the EQL pool (customers excluded)
 
 ```
-find_overlaps(
+find_overlapping_accounts_and_leads(
   list_name: "<product> launch leads — <anchor> customers that are our prospects",
   our_segments: ["prospects"],
   partners: <anchor set with segments: ["customers","open_opportunities"]>,
@@ -176,12 +178,12 @@ Excluding `customers` from `our_segments` drops accounts you already sell to (lo
 
 ## Step 3 — Label the our-side segment (add the open-opp pass)
 
-`find_overlaps` returns the partner's segment, not yours, so a single call can't tell a prospect from an open opp on your side. Step 2 already pulled the `our_segments: ["prospects"]` pass — **that result is your prime lead list; do not re-query it here.** Make one additional call to separate the in-motion accounts:
+`find_overlapping_accounts_and_leads` returns the partner's segment, not yours, so a single call can't tell a prospect from an open opp on your side. Step 2 already pulled the `our_segments: ["prospects"]` pass — **that result is your prime lead list; do not re-query it here.** Make one additional call to separate the in-motion accounts:
 - **Pass A (prospects)** — reuse the Step 2 result as-is → the prime lead list.
 - **Pass B (open opps)** — repeat the Step 2 call with `our_segments: ["open_opportunities"]` (same `partners` anchor set) → accounts already in your pipeline.
 Label Pass A as prime; flag anything in Pass B as **already-in-motion** (lower priority, or hand to crossbeam-co-sell-copilot). Default the lead list to prospects only.
 
-**Net-new-to-CRM whitespace needs a different tool.** `find_overlaps` is an *intersection*: it only
+**Net-new-to-CRM whitespace needs a different tool.** `find_overlapping_accounts_and_leads` is an *intersection*: it only
 returns accounts already in your CRM/populations, so it can never surface an account a partner has
 that you have never entered. Do not imply an overlap list contains net-new names.
 
@@ -212,13 +214,13 @@ Rank highest-first and tier (A/B/C). Never present an unranked dump.
 
 For the **top N ranked** (not the whole list — one call per account):
 ```
-find_partner_contacts(account_id|account_name, partner_id: <anchor partner>)
+find_partner_shared_contacts(account_id|account_name, partner_id: <anchor partner>)
 ```
 Per account, flag:
 - **Contacts available?** Y/N and count.
 - **Priority roles** — economic_buyer, decision_maker, executive_sponsor, technical_buyer (from `insights`).
 - **`in_own_crm`** — `false` = a **net-new** buyer you don't have (the strongest warm path); `true` = coverage you already hold.
-- **Second-party context** — which partner, customer vs open opp, partner segment/AE where exposed.
+- **Second-party context** — which partner, customer vs open opp, partner segment/AE where exposed. When a specific shared field (account tier, renewal date) would sharpen the angle beyond what contacts show, pull it with `get_partner_overlaps_shared_context(partner_name, record_type, record_id)`.
 
 **Data hygiene:** validate each contact's email domain against the account domain; drop mismatches (partner-side artifacts).
 
@@ -253,7 +255,7 @@ Works as a weekly "who's new / who heated up" pass. Offer once to schedule after
 - Exclude what you already sell to (customers) and what you must not prospect (your partners, your investors).
 - Only surface partner data Crossbeam's sharing rules already expose. Absence of data is not absence of overlap — say "not shared by the partner," never "no overlap."
 - Never cold-prospect into an account a partner is actively working — flag for co-sell.
-- Net-new-to-CRM whitespace is out of `find_overlaps`' reach (intersection only). Reach it with `find_new_accounts` (`pipeline_type: "net_new"`), and never imply an overlap list already contains it.
+- Net-new-to-CRM whitespace is out of `find_overlapping_accounts_and_leads`' reach (intersection only). Reach it with `find_new_accounts` (`pipeline_type: "net_new"`), and never imply an overlap list already contains it.
 - Every angle rests on a real better-together truth. Proof points persuade only, always attributed, never invented.
 - Generic and vendor-neutral. No publisher-internal product or skill names. The Crossbeam brand (skill name, "powered by Crossbeam"), Crossbeam MCP tool names, and public case-study companies are fine — the shared interface and public proof every installer has.
 - Prospect lists and partner data are sensitive — keep them out of any output not going to the user.
