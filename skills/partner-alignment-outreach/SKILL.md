@@ -153,7 +153,7 @@ Apply these unless the user specifies otherwise.
 
 Check what's connected before starting. Three things matter:
 
-1. **Crossbeam MCP** (required). Look for tools whose names contain `find_overlap_partners`, `find_overlaps`, `get_account_context`, `find_partner_contacts`, `get_ecosystem_activity`, or `get_partner_sharing_status` (used in Step 2 to confirm the partnership is active; optional, skip the check if absent). The tool-name prefix varies per installation — match on these suffixes, and confirm the actual surface on the first call, since tool sets differ between installs. If no Crossbeam MCP is connected, stop and tell the user to connect the Crossbeam connector (available in the Claude connector directory or at crossbeam.com) and authenticate before running — nothing else in this skill works without it. Do not proceed past this step until Crossbeam is confirmed connected.
+1. **Crossbeam MCP** (required). Look for tools whose names contain `find_overlapping_partners`, `find_overlapping_accounts_and_leads`, `get_account_context`, `find_partner_shared_contacts`, `get_partner_overlaps_shared_context`, `get_ecosystem_activity`, or `get_partner_sharing_status` (used in Step 2 to confirm the partnership is active; optional, skip the check if absent — note this tool is not on the currently verified surface, so confirm it exists on the first call rather than assuming). The tool-name prefix varies per installation — match on these suffixes, and confirm the actual surface on the first call, since tool sets differ between installs. If no Crossbeam MCP is connected, stop and tell the user to connect the Crossbeam connector (available in the Claude connector directory or at crossbeam.com) and authenticate before running — nothing else in this skill works without it. Do not proceed past this step until Crossbeam is confirmed connected.
 2. **A deal source** (flexible). A Salesforce/HubSpot CRM connector, a Snowflake or other warehouse connector, or nothing — in which case ask the user to paste their recent closed-won deals.
 3. **An email connector** (optional). Gmail or Outlook tools that can create drafts (names like `create_draft`). If present, use it to create drafts in the user's inbox. If absent, deliver drafts as formatted text instead.
 
@@ -171,12 +171,12 @@ If zero deals qualify, stop and report "No qualifying closed-won deals in the wi
 
 ## Step 2 — Find the best partner rep for each deal
 
-For each deal, call the Crossbeam `find_overlap_partners` tool with the account's domain (preferred) or name. On the first call of a run, inspect the actual response shape before assuming field names — Crossbeam MCP versions differ in what they expose. If the tool returns a ClarificationRequired for an ambiguous account, prefer retrying with the domain rather than interrupting the run; if still ambiguous, skip the deal and note it in the summary.
+For each deal, call the Crossbeam `find_overlapping_partners` tool with the account's domain (preferred) or name. On the first call of a run, inspect the actual response shape before assuming field names — Crossbeam MCP versions differ in what they expose. If the tool returns a ClarificationRequired for an ambiguous account, prefer retrying with the domain rather than interrupting the run; if still ambiguous, skip the deal and note it in the summary.
 
-From the overlapping partners, you're looking for two things per partner: **what segment/population the account sits in on the partner's side** (open opportunity, customer, prospect) and **who owns the account on the partner's side** (owner name, email, title).
+From the overlapping partners, you're looking for two things per partner: **what segment/population the account sits in on the partner's side** (open opportunity, customer, prospect) and **who owns the account on the partner's side** (owner name, email, title). If a shared custom field (account tier, renewal date) would sharpen the framing in Step 3, pull it with `get_partner_overlaps_shared_context(partner_name, record_type: "account", record_id)`.
 
 **Filter out** partners where:
-- No partner-side owner email is exposed. Before discarding, try `find_partner_contacts` for that account+partner — it may surface a partner-shared contact who can serve as the recipient.
+- No partner-side owner email is exposed. Before discarding, try `find_partner_shared_contacts` for that account+partner — it may surface a partner-shared contact who can serve as the recipient.
 - The owner email's domain matches the won account's own domain (that "owner" is the customer, an unassigned bucket, or an integration user — a data artifact, not a person to email).
 - The owner is obviously a system account (emails like `integration@`, `api@`, `no-reply@`, `gtmops@`).
 
