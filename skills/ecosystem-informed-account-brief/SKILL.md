@@ -131,17 +131,17 @@ Run all three calls. If the account isn't found in Crossbeam, note it and skip t
 ```
 get_account_context(account_domain: "example.com")
 ```
-Accepts `account_domain`, `account_name` (fuzzy), or `account_id`. Domain is the most reliable. Extract the account's CRM `record_id` / `account_id` from the match — Step 3c needs it. If several accounts come back, pick by the user's intent and confirm if unclear.
+Accepts `account_domain`, `account_name` (fuzzy), or `account_id`. Domain is the most reliable. Extract the account's CRM `record_id` / `account_id` from the match — Step 3c needs it. The response now also includes your own CRM data as `own_fields`; use it to fill PRODUCT USAGE or ACCOUNT CONTEXT where a configured account-intelligence source doesn't already cover it. If several accounts come back, pick by the user's intent and confirm if unclear.
 
 **3b — Get partner overlap**
 ```
-find_overlap_partners(account_id: "<record_id>", limit: 100)
+find_overlapping_partners(account_id: "<record_id>", limit: 100)
 ```
 **Always pass `limit`.** The tool defaults to `limit: 10`, so an account overlapping more partners than that silently returns only the first page, with no error and no truncation flag. Pass `limit: 100` and paginate with `page` until the partner list is complete.
 
 If strategic partner tags are configured, filter in the same call — this tool takes the tag directly, so no second call and no manual intersect is needed:
 ```
-find_overlap_partners(account_id: "<record_id>", partner_tag_name: "<tag>", limit: 100)
+find_overlapping_partners(account_id: "<record_id>", partner_tag_name: "<tag>", limit: 100)
 ```
 An ambiguous tag returns `ClarificationRequired` with candidates; present them and retry with `partner_tag_id`. If no tags are configured, omit the tag argument to get every partner that shares the account.
 
@@ -149,11 +149,13 @@ An ambiguous tag returns `ClarificationRequired` with candidates; present them a
 
 For each match capture: partner name, population name, and partner owner name if available. Do not surface partner owner contact details (email, phone) in the brief. If a signal suggests a partner motion, note in NEXT STEPS that partner owner contact details are available but recommend coordinating with their partnerships lead before reaching out — they may already have an active relationship or motion with this partner.
 
+If a partner has shared a custom field worth calling out (account tier, renewal date, and similar), pull it with `get_partner_overlaps_shared_context(partner_name: "<partner>", record_type: "account", record_id: "<record_id>")` and fold it into ECOSYSTEM RELATIONSHIPS rather than leaving it unsurfaced.
+
 **3c — Get ecosystem activity signals**
 ```
-get_ecosystem_activity(record_ids: ["<record_id>"], resource_type: "accounts")
+get_ecosystem_activity(record_ids: ["<record_id>"], record_type: "account")
 ```
-This tool filters by CRM **record ID**, not by domain — use the `record_id` from Step 3a. Optionally narrow with `partner_names` (fuzzy; ambiguous names return `ClarificationRequired` — resolve before proceeding) or `event_types`, whose valid values are `partner_deal_opened`, `partner_deal_closed_won`, and `partner_greenfield_deal_closed_won`. If strategic partner tags are configured, pass the tagged partner names from Step 3b.
+Note the parameter is `record_type` (not `resource_type`), and its accepted values are `account` and `lead` (singular, not `accounts`/`leads`) to match what the response returns. This tool filters by CRM **record ID**, not by domain — use the `record_id` from Step 3a. Optionally narrow with `partner_names` (fuzzy; ambiguous names return `ClarificationRequired` — resolve before proceeding) or `event_types`, whose valid values are `partner_deal_opened`, `partner_deal_closed_won`, and `partner_greenfield_deal_closed_won`. If strategic partner tags are configured, pass the tagged partner names from Step 3b.
 
 Capture: event type (deal opened / deal closed won / greenfield), partner name, date, contact context if available.
 
