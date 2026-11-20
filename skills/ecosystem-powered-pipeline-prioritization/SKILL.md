@@ -80,6 +80,13 @@ By default the scanner picks up signals from every partner you're connected to i
 
 > **Fill in before sharing:** `Strategic partner tags: [e.g. Tier 1, Co-Sell — or leave blank to include all partners]`
 
+> **Step 4b — Exclude any partners (optional)**
+If there are partners you don’t want factoring into this scan — a competitor-adjacent partner, one your team has paused working with, one whose signals tend to be noisy or irrelevant for this use case — name them here. They’re left out of the scan entirely: no signals, no scoring, no mention in the output.
+
+Fill in before sharing: Excluded partners: [e.g. "Partner X, Partner Y" — or leave blank to include all partners]
+
+Excluded partners (optional): [fill in — partner names to leave out of every scan entirely. Leave blank to include all partners.]
+
 **Step 5 — Set your output destination**
 Decide where the ranked list gets delivered. Think about who needs to see it and in what format.
 
@@ -160,9 +167,13 @@ If the list exceeds the configured volume confirmation threshold, stop and tell 
 
 For each account, collect at minimum: account name and domain. Domain makes Crossbeam matching more reliable — include it whenever the source has it.
 
+A blank threshold means no cap, not no check. Whether or not one is configured, state the account count found before moving to Step 2 — a scan nobody has sized yet is the one most likely to turn into something much bigger than intended. If that count is over 100 and no threshold was set, pause and ask whether to proceed, narrow by partner tag or segment, or sample — the same question a configured threshold would have triggered.
+
 ---
 
 ## Step 2 — Pull Crossbeam ecosystem data for each account
+
+Before starting: this step pulls detailed partner data for every account on the list, so the account count from Step 1 sets the real scope of what’s about to run. If that’s a lot of accounts, or partners and populations the user hasn’t scanned before, flag it plainly, the way you’d flag a big data pull before running it — how many accounts, against how many partners or which tags — and let them narrow it, get a count first, or proceed, before anything actually starts. Don’t rely solely on the Step 1 threshold check to catch this.
 
 For each account on the list, run the following. If the account isn't found in Crossbeam, note it and move to the next — don't stop the scan.
 
@@ -188,12 +199,16 @@ An ambiguous tag returns `ClarificationRequired` with candidates; resolve it onc
 
 **`partner_tag_name` takes a single tag, not a list.** Configuration invites several (e.g. "Tier 1, Co-Sell"). If more than one is configured, make one call per tag and union the results by partner before scoring. Passing only the first tag silently drops partners carrying only the others, and because those partners' signals then never enter scoring, the account can be reported as "no signals detected in window" when it actually has some. If no tags are configured, omit the tag argument to get every partner that shares the account.
 
+If excluded partners are configured, drop them from the result before anything else happens. find_overlapping_partners has no exclusion parameter, so this has to happen client-side: after the call returns, remove any partner matching the excluded list by name before Step 2c, scoring, or output ever sees it. An excluded partner should leave no trace in this scan — not a low score, not a “no signals” mention, nothing.
+
 Capture: partner name, population name (interpret intent over exact string — "Pipeline", "Active Opportunities" = open opportunity; "Clients", "Active Customers" = customer). If a specific shared field (account tier, renewal date) would sharpen the "Why it matters" line in Step 4, pull it with `get_partner_overlaps_shared_context(partner_name: "<partner>", record_type: "account", record_id: "<record_id>")` for the top-ranked accounts rather than for every account scanned.
 
 **2c — Get ecosystem activity signals**
 ```
 get_ecosystem_activity(record_ids: ["<record_id>"], record_type: "account")
 ```
+If excluded partners are configured, this is also the step that can keep their events out from the start. Since partner_names / partner_ids narrows the call to specific partners, build that list from the Step 2b result with excluded partners already removed, rather than pulling everyone’s events and filtering after. If events for an excluded partner show up anyway (e.g. because the call ran unfiltered), drop them before scoring — same rule as 2b, no trace in the output.
+
 Note the parameter is `record_type` (not `resource_type`), and its accepted values are `account` and `lead` (singular, not `accounts`/`leads`) to match what the response returns. This tool filters by CRM **record ID**, not by domain — use the `record_id` from Step 2a. Optionally narrow with `partner_names` / `partner_ids`, or with `event_types`, whose valid values are `partner_deal_opened`, `partner_deal_closed_won`, and `partner_greenfield_deal_closed_won`. If strategic partner tags are configured, pass the tagged partner names from Step 2b.
 
 **Resolve `partner_names` before the scan, then pass `partner_ids`.** If any name resolves to zero or multiple partners the tool returns `ClarificationRequired` and **no events at all** — which this step would otherwise read as "no activity" and score 0, producing the exact false negative Step 2b warns about. Resolve the tagged partner names once at the start of the scan, then pass the confirmed `partner_ids` for every account, so an ambiguous name cannot re-prompt once per account across a long run.
@@ -313,10 +328,12 @@ If the user hasn't already set up a scheduled run, offer once at the end: "Want 
 - Always run Crossbeam ecosystem steps (Steps 2a–2c) for every account on the list.
 - Do not pull the account list from any source not explicitly configured. If no source is configured, stop.
 - Volume confirmation threshold must be respected — never scan more than the threshold without explicit user confirmation.
+- A blank threshold is not permission to skip the check. Always state the account count before Step 2 begins, and pause on a large or unsized count even when no threshold was configured.
 - Do not surface partner owner contact details. Note availability and route through partnerships lead.
 - Outreach angles are optional — only generate if explicitly requested.
 - Partnerships lead coordination note must appear wherever outreach is suggested.
 - Strategic partner tag IDs are set by the user in Configuration — do not hardcode them.
+- Excluded partners are removed before scoring and output, not just down-ranked. If a partner is on the excluded list, nothing about them appears anywhere in the scan, including a “no signals” mention.
 - Accounts not found in Crossbeam are noted, not silently skipped.
 - The output is for internal use only.
 - **Don't imply a partner sees what you see.** Crossbeam surfaces what partners have shared with you under your sharing rules. That is not the same as the partner having confirmed the signal, or being able to see this account from their side. Report ecosystem signals as what the data shows, not as partner-stated fact.
